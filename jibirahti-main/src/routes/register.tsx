@@ -57,6 +57,9 @@ function RegisterPage() {
     } else {
       if (signUpData.user) {
         const now = new Date();
+        // ignoreDuplicates: false so this overwrites whatever the DB trigger set.
+        // The trigger fires synchronously before this code runs and may have
+        // inserted trial_expires_at = NOW() + 48 hours — we must overwrite it.
         await supabase.from("profiles").upsert(
           {
             id: signUpData.user.id,
@@ -64,7 +67,7 @@ function RegisterPage() {
             trial_started_at: now.toISOString(),
             trial_expires_at: new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000).toISOString(),
           },
-          { onConflict: "id", ignoreDuplicates: true }
+          { onConflict: "id", ignoreDuplicates: false }
         );
       }
       toast.success(t("accountCreated"));
