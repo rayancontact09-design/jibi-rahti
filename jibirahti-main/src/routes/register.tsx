@@ -62,7 +62,7 @@ function RegisterPage() {
             id: signUpData.user.id,
             account_status: "trial",
             trial_started_at: now.toISOString(),
-            trial_expires_at: new Date(now.getTime() + 48 * 60 * 60 * 1000).toISOString(),
+            trial_expires_at: new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000).toISOString(),
           },
           { onConflict: "id", ignoreDuplicates: true }
         );

@@ -425,7 +425,7 @@ function SettingsPage() {
   const displayTrialExpiry =
     trialExpiresAt ??
     (user?.created_at
-      ? new Date(new Date(user.created_at).getTime() + 48 * 60 * 60 * 1000).toISOString()
+      ? new Date(new Date(user.created_at).getTime() + 7 * 24 * 60 * 60 * 1000).toISOString()
       : null);
 
   const createdAt = user?.created_at
