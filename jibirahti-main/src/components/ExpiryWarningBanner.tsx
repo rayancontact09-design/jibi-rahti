@@ -13,12 +13,13 @@ function daysUntil(iso: string): number {
 }
 
 // Which warning threshold applies (null = no warning needed).
-// Once the user dismisses the 7-day banner, it stays dismissed until
-// the threshold drops to 3, then again until it drops to 1.
-function warningThreshold(days: number): 7 | 3 | 1 | null {
+// Trials warn at 3 and 1 days only — 7 days IS the full trial so
+// firing at 7 days would show a warning on the very first login.
+// Subscriptions keep the full 7 / 3 / 1 cadence.
+function warningThreshold(days: number, isTrial: boolean): 7 | 3 | 1 | null {
   if (days <= 1) return 1;
   if (days <= 3) return 3;
-  if (days <= 7) return 7;
+  if (!isTrial && days <= 7) return 7;
   return null;
 }
 
@@ -38,7 +39,7 @@ export function ExpiryWarningBanner() {
     : null;
 
   const days = expiresAt ? daysUntil(expiresAt) : Infinity;
-  const threshold = warningThreshold(days);
+  const threshold = warningThreshold(days, effectiveStatus === "trial");
 
   // A unique key per (expiresAt × threshold) so dismissal resets automatically
   // when the threshold drops (e.g. user dismissed at 7, sees new banner at 3).
