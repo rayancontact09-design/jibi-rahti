@@ -16,53 +16,80 @@ export function BottomNav() {
     { to: "/report", icon: FileBarChart2, label: t("reports"), center: false },
     { to: "/settings", icon: Settings, label: t("settings"), center: false },
   ] as const;
+
   return (
     <nav
-      className="fixed bottom-4 inset-x-0 z-40 px-4"
+      className="fixed bottom-4 inset-x-0 z-40 px-4 pointer-events-none"
       style={{ fontFamily: "'Cairo', 'Poppins', sans-serif" }}
     >
-      <div className="max-w-md mx-auto rounded-[28px] glass shadow-elegant px-1 py-2">
-        <ul className="grid grid-cols-4">
-          {items.map(({ to, icon: Icon, label, center }) => {
+      <div className="max-w-md mx-auto pointer-events-auto rounded-[28px] glass shadow-elegant px-1 py-2 relative overflow-visible">
+        {/*
+          Layout: [Dashboard flex-1] [Reports flex-1] [spacer w-16] [Settings flex-1] [invisible flex-1]
+          Math: spacer_center = 2×(W-64)/4 + 32 = W/2  →  always aligns with absolute left-1/2
+          All 3 visible nav items share the same flex-1 width = (W-64)/4
+        */}
+        <ul className="flex items-center">
+          {[items[0], items[2]].map(({ to, icon: Icon, label }) => {
             const active = pathname === to;
             return (
-              <li key={to}>
+              <li key={to} className="flex flex-1">
                 <Link
                   to={to}
-                  className={`flex flex-col items-center justify-center gap-1.5 py-2.5 rounded-2xl text-[10px] font-medium transition-all duration-300 active:scale-95 w-full min-h-[60px] ${
-                    !center && active
+                  className={`flex-1 flex flex-col items-center justify-center gap-1.5 py-2.5 rounded-2xl text-[10px] font-medium transition-all duration-300 active:scale-95 min-h-[60px] ${
+                    active
                       ? "text-primary bg-primary/10"
-                      : !center
-                      ? "text-muted-foreground hover:text-foreground hover:bg-accent/40"
-                      : active
-                      ? "text-primary"
-                      : "text-muted-foreground hover:text-foreground"
+                      : "text-muted-foreground hover:text-foreground hover:bg-accent/40"
                   }`}
                 >
-                  {center ? (
-                    <div
-                      className={`h-10 w-10 rounded-2xl flex items-center justify-center transition-all duration-300 ${
-                        active
-                          ? "gradient-primary shadow-[0_4px_14px_rgba(15,139,126,0.45)] scale-105"
-                          : "bg-gradient-to-br from-primary/20 to-primary/10"
-                      }`}
-                    >
-                      <Icon
-                        className={`h-5 w-5 transition-transform duration-300 ${active ? "text-white scale-110" : "text-primary"}`}
-                        strokeWidth={2.2}
-                      />
-                    </div>
-                  ) : (
-                    <Icon
-                      className={`h-5 w-5 transition-transform duration-300 ${active ? "scale-110" : ""}`}
-                    />
-                  )}
-                  <span className="leading-tight text-center line-clamp-2 px-1 w-full">{label}</span>
+                  <Icon className={`h-5 w-5 transition-transform duration-300 ${active ? "scale-110" : ""}`} />
+                  <span className="leading-tight text-center">{label}</span>
                 </Link>
               </li>
             );
           })}
+          <li className="w-16 shrink-0" aria-hidden="true" />
+          {[items[3]].map(({ to, icon: Icon, label }) => {
+            const active = pathname === to;
+            return (
+              <li key={to} className="flex flex-1">
+                <Link
+                  to={to}
+                  className={`flex-1 flex flex-col items-center justify-center gap-1.5 py-2.5 rounded-2xl text-[10px] font-medium transition-all duration-300 active:scale-95 min-h-[60px] ${
+                    active
+                      ? "text-primary bg-primary/10"
+                      : "text-muted-foreground hover:text-foreground hover:bg-accent/40"
+                  }`}
+                >
+                  <Icon className={`h-5 w-5 transition-transform duration-300 ${active ? "scale-110" : ""}`} />
+                  <span className="leading-tight text-center">{label}</span>
+                </Link>
+              </li>
+            );
+          })}
+          <li className="flex-1 pointer-events-none" aria-hidden="true" />
         </ul>
+
+        {/* FAB: absolute left-1/2 → pixel-perfect center on every screen width */}
+        {(() => {
+          const { to, icon: Icon, label } = items[1];
+          const active = pathname === to;
+          return (
+            <div className="absolute left-1/2 -translate-x-1/2 top-0 -translate-y-7 flex flex-col items-center gap-1.5">
+              <Link
+                to={to}
+                aria-label={label}
+                className={`h-16 w-16 rounded-full gradient-primary text-white flex items-center justify-center shadow-[0_8px_32px_rgba(15,139,126,0.7)] ring-4 ring-background transition-transform duration-300 active:scale-90 hover:scale-110 ${
+                  active ? "ring-primary/30 scale-105" : ""
+                }`}
+              >
+                <Icon className="h-7 w-7" strokeWidth={2.5} />
+              </Link>
+              <span className={`text-[10px] font-medium ${active ? "text-primary" : "text-muted-foreground"}`}>
+                {label}
+              </span>
+            </div>
+          );
+        })()}
       </div>
     </nav>
   );
