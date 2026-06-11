@@ -1,0 +1,255 @@
+@import url("https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&family=Poppins:wght@400;600;700&display=swap");
+@import "tailwindcss" source(none);
+@source "../src";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+/*
+ * Design system definition.
+ *
+ * The @theme inline block maps CSS custom properties to Tailwind utility
+ * classes (e.g. --color-primary -> bg-primary, text-primary).
+ *
+ * All color values use HEX / RGBA — oklch and color-mix are intentionally
+ * absent so tools like html2canvas can parse every property.
+ */
+
+@theme inline {
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --radius-2xl: calc(var(--radius) + 8px);
+  --radius-3xl: calc(var(--radius) + 12px);
+  --radius-4xl: calc(var(--radius) + 16px);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-success: var(--success);
+  --color-warning: var(--warning);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-ring-offset-background: var(--background);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+
+  /* ── Built-in palette overrides ─────────────────────────────────────────────
+   * Tailwind v4 @theme inline bakes color values into utility-class rules.
+   * Without these overrides it inlines oklch() which html2canvas cannot parse.
+   * Every class used anywhere in src/ must have its shade listed here.
+   * Hex values are the exact sRGB conversions of the corresponding oklch values.
+   * ─────────────────────────────────────────────────────────────────────────── */
+
+  /* emerald */
+  --color-emerald-50:  #ecfdf5;
+  --color-emerald-100: #d1fae5;
+  --color-emerald-200: #a7f3d0;
+  --color-emerald-300: #6ee7b7;
+  --color-emerald-400: #34d399;
+  --color-emerald-500: #10b981;
+  --color-emerald-600: #059669;
+  --color-emerald-700: #047857;
+  --color-emerald-800: #065f46;
+  --color-emerald-900: #064e3b;
+
+  /* red */
+  --color-red-50:  #fef2f2;
+  --color-red-100: #fee2e2;
+  --color-red-200: #fecaca;
+  --color-red-300: #fca5a5;
+  --color-red-400: #f87171;
+  --color-red-500: #ef4444;
+  --color-red-600: #dc2626;
+  --color-red-700: #b91c1c;
+
+  /* orange */
+  --color-orange-50:  #fff7ed;
+  --color-orange-100: #ffedd5;
+  --color-orange-200: #fed7aa;
+  --color-orange-300: #fdba74;
+  --color-orange-400: #fb923c;
+  --color-orange-500: #f97316;
+  --color-orange-600: #ea580c;
+
+  /* amber */
+  --color-amber-50:  #fffbeb;
+  --color-amber-100: #fef3c7;
+  --color-amber-200: #fde68a;
+  --color-amber-300: #fcd34d;
+  --color-amber-400: #fbbf24;
+  --color-amber-500: #f59e0b;
+  --color-amber-600: #d97706;
+  --color-amber-700: #b45309;
+
+  /* gray */
+  --color-gray-50:  #f9fafb;
+  --color-gray-100: #f3f4f6;
+  --color-gray-200: #e5e7eb;
+  --color-gray-300: #d1d5db;
+  --color-gray-400: #9ca3af;
+  --color-gray-500: #6b7280;
+  --color-gray-600: #4b5563;
+  --color-gray-700: #374151;
+  --color-gray-800: #1f2937;
+  --color-gray-900: #111827;
+
+  /* neutral anchors */
+  --color-black: #000000;
+  --color-white: #ffffff;
+}
+
+:root {
+  --radius: 1rem;
+  --background: #f5fbf9;
+  --foreground: #1c2e2c;
+  --card: #ffffff;
+  --card-foreground: #1c2e2c;
+  --popover: #ffffff;
+  --popover-foreground: #1e3230;
+  --primary: #14b8a6;
+  --primary-foreground: #f0fefc;
+  --primary-glow: #5eead4;
+  --secondary: #ecfaf7;
+  --secondary-foreground: #203c39;
+  --success: #22c55e;
+  --warning: #f59e0b;
+  --muted: #f0f9f7;
+  --muted-foreground: #6b7f7d;
+  --accent: #edfaf7;
+  --accent-foreground: #183532;
+  --destructive: #dc2626;
+  --destructive-foreground: #f8fafc;
+  --border: #e2eceb;
+  --input: #e2eceb;
+  --ring: #14b8a6;
+  --gradient-primary: linear-gradient(135deg, #1FAF8B 0%, #4CD4B0 100%);
+  --gradient-hero: linear-gradient(135deg, #0F8B7E 0%, #1FAF8B 45%, #4CD4B0 100%);
+  --gradient-soft: linear-gradient(135deg, #ECFDF5 0%, #D1FAE5 100%);
+  --shadow-elegant: 0 20px 50px -25px rgba(20, 184, 166, 0.55);
+  --shadow-card: 0 8px 30px -12px rgba(15, 118, 110, 0.18);
+  --glass-bg: rgba(255, 255, 255, 0.75);
+  --glass-border: rgba(255, 255, 255, 0.60);
+  --chart-1: #f97316;
+  --chart-2: #0d9488;
+  --chart-3: #475569;
+  --chart-4: #a3e635;
+  --chart-5: #eab308;
+  --sidebar: #f8fafc;
+  --sidebar-foreground: #0f172a;
+  --sidebar-primary: #1e293b;
+  --sidebar-primary-foreground: #f8fafc;
+  --sidebar-accent: #f1f5f9;
+  --sidebar-accent-foreground: #1e293b;
+  --sidebar-border: #e2e8f0;
+  --sidebar-ring: #94a3b8;
+}
+
+.dark {
+  --background: #111f1e;
+  --foreground: #f0fefc;
+  --card: #162524;
+  --card-foreground: #f0fefc;
+  --popover: #162524;
+  --popover-foreground: #f0fefc;
+  --primary: #2dd4bf;
+  --primary-foreground: #0d1f1e;
+  --primary-glow: #5eead4;
+  --secondary: #1c2e2c;
+  --secondary-foreground: #f0fefc;
+  --muted: #1c2e2c;
+  --muted-foreground: #94a3b8;
+  --accent: #1e3030;
+  --accent-foreground: #f0fefc;
+  --destructive: #f87171;
+  --destructive-foreground: #f8fafc;
+  --border: rgba(255, 255, 255, 0.10);
+  --input: rgba(255, 255, 255, 0.15);
+  --ring: #2dd4bf;
+  --gradient-primary: linear-gradient(135deg, #1FAF8B 0%, #4CD4B0 100%);
+  --gradient-hero: linear-gradient(135deg, #0B6E63 0%, #1FAF8B 50%, #4CD4B0 100%);
+  --gradient-soft: linear-gradient(135deg, #1a302c 0%, #162928 100%);
+  --shadow-elegant: 0 20px 50px -25px rgba(31, 175, 139, 0.55);
+  --shadow-card: 0 8px 30px -12px rgba(0, 0, 0, 0.50);
+  --glass-bg: rgba(22, 37, 36, 0.70);
+  --glass-border: rgba(255, 255, 255, 0.12);
+  --chart-1: #6366f1;
+  --chart-2: #34d399;
+  --chart-3: #eab308;
+  --chart-4: #c026d3;
+  --chart-5: #f87171;
+  --sidebar: #1e293b;
+  --sidebar-foreground: #f8fafc;
+  --sidebar-primary: #6366f1;
+  --sidebar-primary-foreground: #f8fafc;
+  --sidebar-accent: #293548;
+  --sidebar-accent-foreground: #f8fafc;
+  --sidebar-border: rgba(255, 255, 255, 0.10);
+  --sidebar-ring: #64748b;
+}
+
+@layer base {
+  * {
+    border-color: var(--color-border);
+  }
+
+  body {
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+  }
+}
+
+@layer utilities {
+  .glass {
+    background: var(--glass-bg);
+    backdrop-filter: blur(20px) saturate(160%);
+    -webkit-backdrop-filter: blur(20px) saturate(160%);
+    border: 1px solid var(--glass-border);
+  }
+  .gradient-primary { background: var(--gradient-primary); }
+  .gradient-hero { background: var(--gradient-hero); }
+  .gradient-soft { background: var(--gradient-soft); }
+  .shadow-elegant { box-shadow: var(--shadow-elegant); }
+  .shadow-card { box-shadow: var(--shadow-card); }
+  .text-balance-positive { color: #22c55e; }
+}
+
+@keyframes float-slow {
+  0%,100% { transform: translateY(0) translateX(0); }
+  50% { transform: translateY(-12px) translateX(6px); }
+}
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+@keyframes count-up {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.animate-float-slow { animation: float-slow 8s ease-in-out infinite; }
+.animate-count-up { animation: count-up 0.6s ease-out both; }
