@@ -18,77 +18,51 @@ export function BottomNav() {
   ] as const;
   return (
     <nav
-      className="fixed bottom-4 inset-x-0 z-40 px-4 pointer-events-none"
+      className="fixed bottom-4 inset-x-0 z-40 px-4"
       style={{ fontFamily: "'Cairo', 'Poppins', sans-serif" }}
     >
-      <div className="max-w-md mx-auto pointer-events-auto rounded-[28px] glass shadow-elegant px-2 py-2 transition-all relative">
-        {/* Non-center nav items: Dashboard + Reports on left, Settings + invisible balance on right.
-            A w-16 spacer in the center reserves room for the FAB.
-            Math proof: spacer center = 8 + (W-80)/2 + 32 = W/2 for any W → always aligns with left-1/2. */}
-        <ul className="flex items-center">
-          {[items[0], items[2]].map(({ to, icon: Icon, label }) => {
+      <div className="max-w-md mx-auto rounded-[28px] glass shadow-elegant px-1 py-2">
+        <ul className="grid grid-cols-4">
+          {items.map(({ to, icon: Icon, label, center }) => {
             const active = pathname === to;
             return (
-              <li key={to} className="flex flex-1">
+              <li key={to}>
                 <Link
                   to={to}
-                  className={`flex-1 flex flex-col items-center justify-center gap-1 mx-1 py-2.5 rounded-2xl text-[11px] font-medium transition-all duration-300 active:scale-95 ${
-                    active
-                      ? "text-primary bg-primary/10 shadow-inner"
-                      : "text-muted-foreground hover:text-foreground hover:bg-accent/40"
+                  className={`flex flex-col items-center justify-center gap-1.5 py-2.5 rounded-2xl text-[10px] font-medium transition-all duration-300 active:scale-95 w-full min-h-[60px] ${
+                    !center && active
+                      ? "text-primary bg-primary/10"
+                      : !center
+                      ? "text-muted-foreground hover:text-foreground hover:bg-accent/40"
+                      : active
+                      ? "text-primary"
+                      : "text-muted-foreground hover:text-foreground"
                   }`}
                 >
-                  <Icon className={`h-5 w-5 transition-transform ${active ? "scale-110" : ""}`} />
-                  <span>{label}</span>
+                  {center ? (
+                    <div
+                      className={`h-10 w-10 rounded-2xl flex items-center justify-center transition-all duration-300 ${
+                        active
+                          ? "gradient-primary shadow-[0_4px_14px_rgba(15,139,126,0.45)] scale-105"
+                          : "bg-gradient-to-br from-primary/20 to-primary/10"
+                      }`}
+                    >
+                      <Icon
+                        className={`h-5 w-5 transition-transform duration-300 ${active ? "text-white scale-110" : "text-primary"}`}
+                        strokeWidth={2.2}
+                      />
+                    </div>
+                  ) : (
+                    <Icon
+                      className={`h-5 w-5 transition-transform duration-300 ${active ? "scale-110" : ""}`}
+                    />
+                  )}
+                  <span className="leading-tight text-center line-clamp-2 px-1 w-full">{label}</span>
                 </Link>
               </li>
             );
           })}
-          {/* Spacer: reserves the FAB footprint so surrounding items don't overlap it */}
-          <li className="w-16 shrink-0" aria-hidden="true" />
-          {[items[3]].map(({ to, icon: Icon, label }) => {
-            const active = pathname === to;
-            return (
-              <li key={to} className="flex flex-1">
-                <Link
-                  to={to}
-                  className={`flex-1 flex flex-col items-center justify-center gap-1 mx-1 py-2.5 rounded-2xl text-[11px] font-medium transition-all duration-300 active:scale-95 ${
-                    active
-                      ? "text-primary bg-primary/10 shadow-inner"
-                      : "text-muted-foreground hover:text-foreground hover:bg-accent/40"
-                  }`}
-                >
-                  <Icon className={`h-5 w-5 transition-transform ${active ? "scale-110" : ""}`} />
-                  <span>{label}</span>
-                </Link>
-              </li>
-            );
-          })}
-          {/* Invisible balance item: mirrors the left side's 2 flex-1 items so the spacer stays centered */}
-          <li className="flex-1 pointer-events-none" aria-hidden="true" />
         </ul>
-
-        {/* FAB: absolutely positioned at left-1/2 → guaranteed pixel-perfect center on every screen size */}
-        {(() => {
-          const { to, icon: Icon, label } = items[1];
-          const active = pathname === to;
-          return (
-            <div className="absolute left-1/2 -translate-x-1/2 top-0 -translate-y-6 flex flex-col items-center gap-1 pointer-events-auto">
-              <Link
-                to={to}
-                aria-label={label}
-                className={`h-14 w-14 rounded-full gradient-primary text-white flex items-center justify-center shadow-elegant transition-transform duration-300 active:scale-90 hover:scale-110 ring-4 ring-background ${
-                  active ? "ring-primary/30" : ""
-                }`}
-              >
-                <Icon className="h-7 w-7" strokeWidth={2.2} />
-              </Link>
-              <span className={`text-[10px] font-medium ${active ? "text-primary" : "text-muted-foreground"}`}>
-                {label}
-              </span>
-            </div>
-          );
-        })()}
       </div>
     </nav>
   );

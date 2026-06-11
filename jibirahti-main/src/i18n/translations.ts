@@ -240,7 +240,7 @@ export const translations: Record<Lang, Record<string, string>> = {
     goHome: "Retour à l'accueil",
 
     // ── Dashboard ─────────────────────────────────────────────────────────────
-    dashboard: "Tableau de bord",
+    dashboard: "Accueil",
     addExpense: "Ajouter une dépense",
     settings: "Paramètres",
     income: "Revenu",
@@ -518,7 +518,7 @@ export const translations: Record<Lang, Record<string, string>> = {
     goHome: "العودة للرئيسية",
 
     // ── Dashboard ─────────────────────────────────────────────────────────────
-    dashboard: "لوحة التحكم",
+    dashboard: "الرئيسية",
     addExpense: "إضافة مصروف",
     settings: "الإعدادات",
     income: "الدخل",
