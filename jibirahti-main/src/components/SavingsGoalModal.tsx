@@ -68,7 +68,7 @@ export function SavingsGoalModal({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent
         dir={rtl ? "rtl" : "ltr"}
-        className="max-w-md p-0 border-0 rounded-3xl overflow-hidden shadow-[0_25px_60px_-15px_rgba(15,139,126,0.55)] bg-white max-h-[92vh] overflow-y-auto"
+        className="max-w-md p-0 border-0 rounded-3xl overflow-hidden shadow-[0_25px_60px_-15px_rgba(15,139,126,0.55)] bg-white text-[#1c2e2c] max-h-[92vh] overflow-y-auto"
         style={{ fontFamily: arFont }}
       >
         {/* Hero header */}
@@ -105,7 +105,7 @@ export function SavingsGoalModal({
           </div>
         </div>
 
-        <div className="px-5 pt-5 pb-6 space-y-4 -mt-4 bg-white rounded-t-3xl relative">
+        <div className="px-5 pt-5 pb-6 space-y-4 -mt-4 bg-white text-[#1c2e2c] rounded-t-3xl relative min-w-0 overflow-hidden">
           {/* Goal name */}
           <div>
             <label className="text-xs font-semibold text-[#0F766E] mb-1.5 block">{t("goalName")}</label>
@@ -113,7 +113,7 @@ export function SavingsGoalModal({
               value={name}
               onChange={(e) => setName(e.target.value)}
               placeholder={t("goalNamePh")}
-              className="rounded-2xl h-11 border-[#D1FAE5] bg-[#F4FBF8] focus-visible:ring-[#1FAF8B]"
+              className="rounded-2xl h-11 border-[#D1FAE5] bg-[#F4FBF8] text-[#1c2e2c] placeholder:text-[#6b7f7d] focus-visible:ring-[#1FAF8B]"
               style={{ textAlign: rtl ? "right" : "left", fontFamily: arFont }}
             />
           </div>
@@ -127,7 +127,7 @@ export function SavingsGoalModal({
                 min="0"
                 value={target || ""}
                 onChange={(e) => setTarget(parseFloat(e.target.value) || 0)}
-                className="rounded-2xl h-11 border-[#D1FAE5] bg-[#F4FBF8] focus-visible:ring-[#1FAF8B] pr-14"
+                className="rounded-2xl h-11 border-[#D1FAE5] bg-[#F4FBF8] text-[#1c2e2c] placeholder:text-[#6b7f7d] focus-visible:ring-[#1FAF8B] pr-14 min-w-0"
                 style={{ textAlign: rtl ? "right" : "left" }}
               />
               <span className={`absolute top-1/2 -translate-y-1/2 text-xs font-bold text-[#0F8B7E] ${rtl ? "left-3" : "right-3"}`}>
@@ -146,7 +146,7 @@ export function SavingsGoalModal({
               type="date"
               value={date}
               onChange={(e) => setDate(e.target.value)}
-              className="rounded-2xl h-11 border-[#D1FAE5] bg-[#F4FBF8] focus-visible:ring-[#1FAF8B]"
+              className="rounded-2xl h-11 border-[#D1FAE5] bg-[#F4FBF8] text-[#1c2e2c] placeholder:text-[#6b7f7d] focus-visible:ring-[#1FAF8B]"
             />
           </div>
 

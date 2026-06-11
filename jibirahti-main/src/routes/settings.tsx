@@ -587,8 +587,8 @@ function SettingsPage() {
         <div className="mt-4">
           <Popover>
             <PopoverTrigger asChild>
-              <Button type="button" variant="outline" className="w-full justify-start gap-2">
-                <CalendarDays className="h-4 w-4" />
+              <Button type="button" variant="outline" className="w-full justify-start gap-2 h-auto min-h-[2.25rem] whitespace-normal py-2 text-left leading-snug">
+                <CalendarDays className="h-4 w-4 shrink-0" />
                 {incomeDay ? t("incomeDayInfo").replace("{day}", String(incomeDay)) : t("incomeDay")}
               </Button>
             </PopoverTrigger>
