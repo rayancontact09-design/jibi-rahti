@@ -95,7 +95,7 @@ type Ctx = State & {
 
 const BudgetCtx = createContext<Ctx | null>(null);
 
-async function loadUserData(userId: string): Promise<State> {
+async function loadUserData(userId: string, userEmail?: string | null): Promise<State> {
   const [profileRes, expensesRes, budgetsRes, goalsRes, additionalIncomeRes] = await Promise.all([
     supabase.from("profiles").select("*").eq("id", userId).maybeSingle(),
     supabase.from("expenses").select("*").eq("user_id", userId),
@@ -147,6 +147,19 @@ async function loadUserData(userId: string): Promise<State> {
         if (error) console.error("[jibi] trial repair:", error.message);
       });
     trialExpiresAt = repairedExpiry;
+  }
+
+  // Revocation check — strips active status if the redeemed code has been revoked
+  if (profile?.account_status === "active" && userEmail !== "rayan.contact09@gmail.com") {
+    const { data: isRevoked } = await supabase.rpc("check_code_revocation", { p_user_id: userId });
+    if (isRevoked === true) {
+      const expiredAt = new Date(Date.now() - 1000).toISOString();
+      await supabase
+        .from("profiles")
+        .update({ account_status: "expired", subscription_expires_at: expiredAt })
+        .eq("id", userId);
+      profile = { ...profile, account_status: "expired", subscription_expires_at: expiredAt };
+    }
   }
 
   return {
@@ -205,14 +218,28 @@ export function BudgetProvider({ children }: { children: ReactNode }) {
       .eq("id", userId)
       .maybeSingle();
     if (profile) {
+      let accountStatus = (profile.account_status ?? "trial") as AccountStatus;
+      let subscriptionExpiresAt = profile.subscription_expires_at ?? null;
+      if (accountStatus === "active" && user?.email !== "rayan.contact09@gmail.com") {
+        const { data: isRevoked } = await supabase.rpc("check_code_revocation", { p_user_id: userId });
+        if (isRevoked === true) {
+          const expiredAt = new Date(Date.now() - 1000).toISOString();
+          await supabase
+            .from("profiles")
+            .update({ account_status: "expired", subscription_expires_at: expiredAt })
+            .eq("id", userId);
+          accountStatus = "expired";
+          subscriptionExpiresAt = expiredAt;
+        }
+      }
       setState((s) => ({
         ...s,
-        accountStatus: (profile.account_status ?? "trial") as AccountStatus,
+        accountStatus,
         trialExpiresAt: profile.trial_expires_at ?? null,
-        subscriptionExpiresAt: profile.subscription_expires_at ?? null,
+        subscriptionExpiresAt,
       }));
     }
-  }, [userId]);
+  }, [userId, user?.email]);
 
   // Load data when user changes
   useEffect(() => {
@@ -224,7 +251,7 @@ export function BudgetProvider({ children }: { children: ReactNode }) {
     }
     initialized.current = false;
     setLoading(true);
-    loadUserData(userId)
+    loadUserData(userId, user?.email)
       .then((data) => {
         // Mark ready BEFORE setState so the save effects that fire after
         // re-render see initialized=true and can persist user changes.
@@ -239,6 +266,13 @@ export function BudgetProvider({ children }: { children: ReactNode }) {
         setLoading(false);
       });
   }, [userId]);
+
+  // Periodically re-check revocation for active sessions (every 5 minutes)
+  useEffect(() => {
+    if (!userId) return;
+    const timer = setInterval(() => refreshProfile(), 5 * 60 * 1000);
+    return () => clearInterval(timer);
+  }, [userId, refreshProfile]);
 
   // Sync lang/dir to document and persist to localStorage
   useEffect(() => {
