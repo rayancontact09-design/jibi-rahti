@@ -7,6 +7,7 @@ import {
   TrendingUp, PiggyBank, FileText, Bell, Smartphone,
   Receipt, ChevronDown, ChevronUp, MessageCircle, Check, Shield, User,
 } from "lucide-react";
+import { trackAppInstallClicked } from "@/lib/analytics";
 
 export const Route = createFileRoute("/")({
   component: LandingPage,
@@ -165,6 +166,7 @@ function LandingPage() {
   }, [user, loading, navigate]);
 
   const handleInstall = async () => {
+    trackAppInstallClicked();
     const evt = window.__pwaPrompt;
     if (evt) await evt.prompt();
   };

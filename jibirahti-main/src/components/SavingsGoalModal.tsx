@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
 import { useBudget, formatMAD } from "@/lib/budget-store";
 import { Target, Calendar, Sparkles, Upload, TrendingUp, Clock } from "lucide-react";
+import { trackSavingsGoalCreated } from "@/lib/analytics";
 
 export function SavingsGoalModal({
   open,
@@ -61,6 +62,7 @@ export function SavingsGoalModal({
   const handleSave = () => {
     setSavingsGoal({ name, target, targetDate: date || undefined, monthlyPct: pct, image });
     if (monthlyAmount > 0) setSavings(monthlyAmount);
+    trackSavingsGoalCreated();
     onOpenChange(false);
   };
 

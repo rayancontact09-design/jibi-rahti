@@ -10,6 +10,7 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Eye, EyeOff, Wallet } from "lucide-react";
 import { toast } from "sonner";
+import { trackSignup } from "@/lib/analytics";
 
 export const Route = createFileRoute("/register")({
   component: RegisterPage,
@@ -70,6 +71,7 @@ function RegisterPage() {
           { onConflict: "id", ignoreDuplicates: false }
         );
       }
+      trackSignup();
       toast.success(t("accountCreated"));
       navigate({ to: "/dashboard" });
     }

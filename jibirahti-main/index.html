@@ -21,6 +21,17 @@
     <link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png" />
     <link rel="icon" href="/favicon.ico" sizes="any" />
 
+    <!-- Google Analytics 4 — G-9BZH43CTN3 -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-9BZH43CTN3"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      // send_page_view: false — the router subscription in main.tsx tracks all
+      // page views (including the initial load) to avoid double-counting.
+      gtag('config', 'G-9BZH43CTN3', { send_page_view: false });
+    </script>
+
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link

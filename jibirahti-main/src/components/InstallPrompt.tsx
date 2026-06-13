@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Download, X } from "lucide-react";
 import { useBudget } from "@/lib/budget-store";
+import { trackAppInstallClicked } from "@/lib/analytics";
 
 interface BeforeInstallPromptEvent extends Event {
   prompt(): Promise<void>;
@@ -116,6 +117,7 @@ export function InstallPrompt() {
 
   const handleInstall = async () => {
     console.log("[PWA] install clicked");
+    trackAppInstallClicked();
 
     if (prompt) {
       // Native deferred prompt is available — trigger it directly

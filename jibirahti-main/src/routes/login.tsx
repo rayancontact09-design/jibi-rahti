@@ -10,6 +10,7 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Eye, EyeOff, Wallet } from "lucide-react";
 import { toast } from "sonner";
+import { trackLogin } from "@/lib/analytics";
 
 export const Route = createFileRoute("/login")({
   component: LoginPage,
@@ -45,6 +46,7 @@ function LoginPage() {
     if (error) {
       toast.error(te(error.message));
     } else {
+      trackLogin();
       navigate({ to: "/dashboard" });
     }
     setLoading(false);

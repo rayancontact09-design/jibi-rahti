@@ -16,6 +16,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { trackExpenseAdded } from "@/lib/analytics";
 
 export const Route = createFileRoute("/add")({
   component: AddPage,
@@ -64,6 +65,7 @@ function AddPage() {
       date,
       note: note.trim() || undefined,
     });
+    trackExpenseAdded();
     navigate({ to: "/dashboard" });
   };
 
