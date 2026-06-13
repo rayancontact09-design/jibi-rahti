@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+Disallow: /dashboard
+Disallow: /add
+Disallow: /report
+Disallow: /settings
+Disallow: /admin
+
+Sitemap: https://jibirahti.com/sitemap.xml
