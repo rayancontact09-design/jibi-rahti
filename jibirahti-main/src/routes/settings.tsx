@@ -19,6 +19,7 @@ import {
 import { AlertTriangle, CalendarDays, CheckCircle2, Crown, Key, LogOut, Mail, Pencil, Plus, Shield, Trash2, TrendingUp, User } from "lucide-react";
 import { computeAccountStatus, formatTimeRemaining } from "@/i18n/format-time";
 import { toast } from "sonner";
+import { WHATSAPP_ACTIVATION_URL } from "@/lib/whatsapp";
 
 type Category = {
   id: string;
@@ -533,7 +534,7 @@ function SettingsPage() {
           <h2 className="font-semibold mb-1">💬 {t("whatsappContactTitle")}</h2>
           <p className="text-xs text-muted-foreground mb-3">{t("whatsappContactDesc")}</p>
           <a
-            href="https://wa.me/212644411059"
+            href={WHATSAPP_ACTIVATION_URL}
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center justify-center gap-2 w-full rounded-xl bg-[#25D366] hover:bg-[#20BD5A] text-white text-sm font-semibold py-2.5 px-4 transition-colors"

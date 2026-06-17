@@ -8,6 +8,7 @@ import {
   Receipt, ChevronDown, ChevronUp, MessageCircle, Check, Shield, User,
 } from "lucide-react";
 import { trackAppInstallClicked } from "@/lib/analytics";
+import { WHATSAPP_ACTIVATION_URL } from "@/lib/whatsapp";
 
 export const Route = createFileRoute("/")({
   component: LandingPage,
@@ -424,7 +425,7 @@ function LandingPage() {
                 style={{ color: "#0F766E" }}>
                 {C.planCta}
               </Link>
-              <a href="https://wa.me/212644411059"
+              <a href={WHATSAPP_ACTIVATION_URL}
                 target="_blank" rel="noopener noreferrer"
                 className="inline-flex items-center justify-center gap-2 rounded-2xl border-2 border-white/50 px-6 py-3 text-sm font-bold text-white hover:bg-white/10 active:scale-[0.98] transition-all">
                 <MessageCircle className="h-4 w-4 shrink-0" />
