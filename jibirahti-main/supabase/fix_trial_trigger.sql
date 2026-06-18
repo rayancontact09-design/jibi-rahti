@@ -10,7 +10,7 @@ WHERE event_object_schema = 'auth'
   AND event_object_table = 'users';
 
 -- ─────────────────────────────────────────────────────────────────────────────
--- Step 2: Replace the trigger function body to use 7 days instead of 48 hours.
+-- Step 2: Replace the trigger function body to use 2 hours instead of 7 days.
 --
 -- The function name below is the most common Supabase default.
 -- If Step 1 shows a different name, replace "handle_new_user" accordingly.
@@ -27,7 +27,7 @@ BEGIN
     NEW.id,
     'trial',
     NOW(),
-    NOW() + INTERVAL '7 days'
+    NOW() + INTERVAL '2 hours'
   )
   ON CONFLICT (id) DO NOTHING;
   RETURN NEW;

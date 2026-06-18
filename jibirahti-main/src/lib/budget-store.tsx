@@ -117,7 +117,7 @@ async function loadUserData(userId: string, userEmail?: string | null): Promise<
   // No profile row — create one (handles users who signed up before the trigger was added)
   if (!profile) {
     const now = new Date();
-    const trialExpiry = new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000);
+    const trialExpiry = new Date(now.getTime() + 2 * 60 * 60 * 1000);
     await supabase.from("profiles").upsert(
       {
         id: userId,
@@ -138,7 +138,7 @@ async function loadUserData(userId: string, userEmail?: string | null): Promise<
   // Fix 4: auto-repair when trigger failed to set trial dates on INSERT
   let trialExpiresAt: string | null = profile?.trial_expires_at ?? null;
   if (profile && profile.account_status === "trial" && !trialExpiresAt) {
-    const repairedExpiry = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString();
+    const repairedExpiry = new Date(Date.now() + 2 * 60 * 60 * 1000).toISOString();
     supabase
       .from("profiles")
       .update({ trial_started_at: new Date().toISOString(), trial_expires_at: repairedExpiry })

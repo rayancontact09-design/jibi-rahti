@@ -426,7 +426,7 @@ function SettingsPage() {
   const displayTrialExpiry =
     trialExpiresAt ??
     (user?.created_at
-      ? new Date(new Date(user.created_at).getTime() + 7 * 24 * 60 * 60 * 1000).toISOString()
+      ? new Date(new Date(user.created_at).getTime() + 2 * 60 * 60 * 1000).toISOString()
       : null);
 
   const createdAt = user?.created_at
@@ -533,6 +533,11 @@ function SettingsPage() {
         <Card className="p-4 mb-4">
           <h2 className="font-semibold mb-1">💬 {t("whatsappContactTitle")}</h2>
           <p className="text-xs text-muted-foreground mb-3">{t("whatsappContactDesc")}</p>
+          <div className="flex flex-col gap-0.5 mb-3 text-xs font-semibold text-primary">
+            <span>{t("priceMonthlyLine")}</span>
+            <span>{t("trialDurationLine")}</span>
+            <span>{t("activateWhatsapp")}</span>
+          </div>
           <a
             href={WHATSAPP_ACTIVATION_URL}
             target="_blank"

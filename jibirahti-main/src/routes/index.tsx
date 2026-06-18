@@ -31,8 +31,14 @@ const T: Record<Lang, Record<string, string>> = {
       "JIBI RAHTI vous aide à suivre vos dépenses, épargner intelligemment et atteindre vos objectifs financiers — directement depuis votre téléphone.",
     heroCta1: "Commencer gratuitement",
     heroCta2: "Installer l'application",
-    heroNote: "Essai gratuit 7 jours · Aucune carte requise",
+    heroNote: "✨ Essai gratuit de 2 heures · Aucune carte requise",
     heroBadge: "Disponible gratuitement maintenant",
+    trialBadge: "✨ Essai gratuit de 2 heures",
+    priceMonthlyLabel: "Abonnement mensuel",
+    priceMonthlyValue: "30 DH / mois",
+    priceYearlyLabel: "Abonnement annuel",
+    priceYearlyValue: "200 DH / an",
+    whatsappActivationFast: "Activation rapide via WhatsApp",
     featTitle: "Tout ce dont vous avez besoin",
     featSub: "Des outils simples et puissants pour maîtriser vos finances personnelles",
     f1t: "Gestion des dépenses",
@@ -51,7 +57,7 @@ const T: Record<Lang, Record<string, string>> = {
     howSub: "Commencez à gérer vos finances en 4 étapes simples",
     h1t: "Créer un compte",
     h1d: "Inscrivez-vous gratuitement en moins d'une minute.",
-    h2t: "Essai gratuit 7 jours",
+    h2t: "Essai gratuit de 2 heures",
     h2d: "Explorez toutes les fonctionnalités sans engagement ni carte bancaire.",
     h3t: "Activer avec un code",
     h3d: "Obtenez votre code d'activation via WhatsApp et activez votre compte.",
@@ -60,20 +66,20 @@ const T: Record<Lang, Record<string, string>> = {
     planTitle: "Un abonnement simple et transparent",
     planSub: "Aucune carte bancaire requise pour commencer votre essai gratuit",
     p1t: "Essai gratuit",
-    p1d: "7 jours pour tester toutes les fonctionnalités sans engagement.",
+    p1d: "2 heures pour tester toutes les fonctionnalités sans engagement.",
     p2t: "Activation par code",
     p2d: "Recevez votre code d'activation unique via WhatsApp après paiement.",
     p3t: "Renouvellement facile",
-    p3d: "Renouvelez votre abonnement chaque mois directement via WhatsApp.",
+    p3d: "Renouvelez votre abonnement (30 DH/mois ou 200 DH/an) directement via WhatsApp.",
     ctaWhatsapp: "Contacter sur WhatsApp",
     planCta: "Commencer l'essai gratuit",
-    planCtaSub: "7 jours gratuits, puis contactez-nous via WhatsApp",
+    planCtaSub: "2 heures gratuites, puis contactez-nous via WhatsApp",
     faqTitle: "Questions fréquentes",
     faqSub: "Tout ce que vous devez savoir avant de commencer",
     q1q: "Comment installer l'application sur mon téléphone ?",
     q1a: "Ouvrez le site dans Chrome (Android) ou Safari (iPhone). Vous verrez apparaître une bannière « Ajouter à l'écran d'accueil » ou cliquez sur le bouton « Installer l'application ». L'application s'installera comme une application native.",
     q2q: "Comment obtenir un code d'activation ?",
-    q2a: "Après votre essai gratuit de 7 jours, contactez-nous sur WhatsApp au +212 644411059. Nous vous enverrons votre code d'activation après confirmation du paiement.",
+    q2a: "Après votre essai gratuit de 2 heures, contactez-nous sur WhatsApp au +212 644411059 pour activer votre abonnement (30 DH/mois ou 200 DH/an). Nous vous enverrons votre code d'activation après confirmation du paiement.",
     q3q: "Comment exporter mon rapport en PDF ?",
     q3a: "Dans la section Rapport, appuyez sur le bouton « Exporter PDF ». Le rapport est généré avec toutes vos données du mois et téléchargé directement sur votre appareil.",
     q4q: "Mes données financières sont-elles sécurisées ?",
@@ -95,8 +101,14 @@ const T: Record<Lang, Record<string, string>> = {
       "جيبي راحتي يساعدك على تتبع نفقاتك، الادخار بذكاء وتحقيق أهدافك المالية — مباشرة من هاتفك.",
     heroCta1: "ابدأ مجاناً",
     heroCta2: "تثبيت التطبيق",
-    heroNote: "تجربة مجانية 7 أيام · بدون بطاقة بنكية",
+    heroNote: "✨ تجربة مجانية لمدة ساعتين · بدون بطاقة بنكية",
     heroBadge: "متاح الآن مجاناً",
+    trialBadge: "✨ تجربة مجانية لمدة ساعتين",
+    priceMonthlyLabel: "اشتراك شهري",
+    priceMonthlyValue: "30 درهم / شهرياً",
+    priceYearlyLabel: "اشتراك سنوي",
+    priceYearlyValue: "200 درهم / سنوياً",
+    whatsappActivationFast: "تفعيل سريع عبر واتساب",
     featTitle: "كل ما تحتاجه",
     featSub: "أدوات بسيطة وقوية للتحكم الكامل في أموالك الشخصية",
     f1t: "إدارة النفقات",
@@ -115,7 +127,7 @@ const T: Record<Lang, Record<string, string>> = {
     howSub: "ابدأ في إدارة أموالك في 4 خطوات بسيطة",
     h1t: "إنشاء حساب",
     h1d: "سجّل مجاناً في أقل من دقيقة واحدة.",
-    h2t: "تجربة مجانية 7 أيام",
+    h2t: "تجربة مجانية لمدة ساعتين",
     h2d: "استكشف جميع الميزات دون التزام أو بطاقة بنكية.",
     h3t: "التفعيل برمز",
     h3d: "احصل على رمز التفعيل عبر واتساب وفعّل حسابك.",
@@ -124,20 +136,20 @@ const T: Record<Lang, Record<string, string>> = {
     planTitle: "اشتراك بسيط وشفاف",
     planSub: "لا حاجة لبطاقة بنكية لبدء تجربتك المجانية",
     p1t: "تجربة مجانية",
-    p1d: "7 أيام كاملة لاختبار جميع الميزات دون أي التزام.",
+    p1d: "ساعتان كاملتان لاختبار جميع الميزات دون أي التزام.",
     p2t: "التفعيل برمز",
     p2d: "استلم رمز التفعيل الخاص بك عبر واتساب بعد الدفع.",
     p3t: "تجديد سهل",
-    p3d: "جدّد اشتراكك كل شهر مباشرة عبر واتساب.",
+    p3d: "جدّد اشتراكك (30 درهم/شهرياً أو 200 درهم/سنوياً) مباشرة عبر واتساب.",
     ctaWhatsapp: "تواصل عبر واتساب",
     planCta: "ابدأ التجربة المجانية",
-    planCtaSub: "7 أيام مجاناً، ثم تواصل معنا عبر واتساب",
+    planCtaSub: "ساعتان مجانتان، ثم تواصل معنا عبر واتساب",
     faqTitle: "الأسئلة الشائعة",
     faqSub: "كل ما تحتاج معرفته قبل البدء",
     q1q: "كيف أثبّت التطبيق على هاتفي؟",
     q1a: "افتح الموقع في Chrome (أندرويد) أو Safari (آيفون). ستظهر بانر «إضافة إلى الشاشة الرئيسية» أو انقر على زر «تثبيت التطبيق». سيُثبَّت التطبيق كتطبيق أصيل.",
     q2q: "كيف أحصل على رمز التفعيل؟",
-    q2a: "بعد انتهاء تجربتك المجانية لـ 7 أيام، تواصل معنا على واتساب 212644411059+. سنرسل لك رمز التفعيل بعد تأكيد الدفع.",
+    q2a: "بعد انتهاء تجربتك المجانية لمدة ساعتين، تواصل معنا على واتساب 212644411059+ لتفعيل اشتراكك (30 درهم/شهرياً أو 200 درهم/سنوياً). سنرسل لك رمز التفعيل بعد تأكيد الدفع.",
     q3q: "كيف أصدّر تقريري بصيغة PDF؟",
     q3a: "في قسم التقرير، انقر على زر «تصدير PDF». يتم إنشاء التقرير بجميع بيانات الشهر وتنزيله مباشرة على جهازك.",
     q4q: "هل بياناتي المالية آمنة؟",
@@ -398,6 +410,24 @@ function LandingPage() {
             <p className="text-muted-foreground text-sm sm:text-base">{C.planSub}</p>
           </div>
 
+          {/* Price cards — monthly / yearly */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
+            {[
+              { label: C.priceMonthlyLabel, value: C.priceMonthlyValue },
+              { label: C.priceYearlyLabel, value: C.priceYearlyValue },
+            ].map(({ label, value }) => (
+              <div key={label}
+                className="flex flex-col items-center text-center rounded-2xl p-6 border border-border/40 shadow-sm"
+                style={{ background: "rgba(255,255,255,0.75)", backdropFilter: "blur(10px)" }}>
+                <p className="text-xs font-semibold text-muted-foreground mb-1">{label}</p>
+                <p className="text-2xl font-extrabold" style={{ color: "#0F766E" }}>{value}</p>
+              </div>
+            ))}
+          </div>
+          <p className="text-center text-xs font-semibold mb-8" style={{ color: "#0F766E" }}>
+            {C.trialBadge}
+          </p>
+
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
             {plans.map(({ icon: Icon, title, desc }) => (
               <div key={title}
@@ -431,6 +461,11 @@ function LandingPage() {
                 <MessageCircle className="h-4 w-4 shrink-0" />
                 {C.ctaWhatsapp}
               </a>
+            </div>
+            <div className="flex flex-col items-center gap-1 mt-5">
+              <p className="text-white text-sm font-bold">{C.priceMonthlyValue}</p>
+              <p className="text-white/70 text-xs">{C.whatsappActivationFast}</p>
+              <p className="text-white/70 text-xs">{C.trialBadge}</p>
             </div>
           </div>
         </div>

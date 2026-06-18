@@ -12,14 +12,16 @@ function daysUntil(iso: string): number {
   return Math.ceil((new Date(iso).getTime() - Date.now()) / 86_400_000);
 }
 
-// Which warning threshold applies (null = no warning needed).
-// Trials warn at 3 and 1 days only — 7 days IS the full trial so
-// firing at 7 days would show a warning on the very first login.
-// Subscriptions keep the full 7 / 3 / 1 cadence.
-function warningThreshold(days: number, isTrial: boolean): 7 | 3 | 1 | null {
+// Whole minutes until the ISO date string, rounded up.
+function minutesUntil(iso: string): number {
+  return Math.ceil((new Date(iso).getTime() - Date.now()) / 60_000);
+}
+
+// Subscription warning threshold (days-based — monthly/yearly plans only).
+function warningThreshold(days: number): 7 | 3 | 1 | null {
   if (days <= 1) return 1;
   if (days <= 3) return 3;
-  if (!isTrial && days <= 7) return 7;
+  if (days <= 7) return 7;
   return null;
 }
 
@@ -31,19 +33,28 @@ export function ExpiryWarningBanner() {
   const effectiveStatus = computeAccountStatus(
     accountStatus, trialExpiresAt, subscriptionExpiresAt
   );
+  const isTrial = effectiveStatus === "trial";
 
   // Pick the date that matters for the current status
   const expiresAt =
     effectiveStatus === "active" ? subscriptionExpiresAt
-    : effectiveStatus === "trial" ? trialExpiresAt
+    : isTrial ? trialExpiresAt
     : null;
 
-  const days = expiresAt ? daysUntil(expiresAt) : Infinity;
-  const threshold = warningThreshold(days, effectiveStatus === "trial");
+  // Trials are now only 2 hours long — day-based thresholds don't apply here.
+  // Warn by minutes instead, only in the final 30 minutes of the trial.
+  // Subscriptions (monthly/yearly) keep the original day-based 7/3/1 cadence.
+  const minutesLeft = isTrial && expiresAt ? minutesUntil(expiresAt) : null;
+  const trialWarning = minutesLeft !== null && minutesLeft > 0 && minutesLeft <= 30;
+
+  const days = !isTrial && expiresAt ? daysUntil(expiresAt) : Infinity;
+  const threshold = !isTrial ? warningThreshold(days) : null;
 
   // A unique key per (expiresAt × threshold) so dismissal resets automatically
   // when the threshold drops (e.g. user dismissed at 7, sees new banner at 3).
-  const warningKey = threshold !== null && expiresAt ? `${expiresAt}|${threshold}` : null;
+  const warningKey = isTrial
+    ? (trialWarning && expiresAt ? `${expiresAt}|trial` : null)
+    : (threshold !== null && expiresAt ? `${expiresAt}|${threshold}` : null);
 
   const [dismissedKey, setDismissedKey] = useState<string | null>(() => {
     try { return localStorage.getItem(STORAGE_KEY); } catch { return null; }
@@ -59,16 +70,18 @@ export function ExpiryWarningBanner() {
     setDismissedKey(warningKey);
   };
 
-  const message =
-    days <= 1
+  const message = isTrial
+    ? t("expiryWarnTrialMinutes").replace("{minutes}", String(minutesLeft))
+    : days <= 1
       ? t("expiryWarnTomorrow")
       : t("expiryWarnDays").replace("{days}", String(days));
 
   // Escalating urgency colour
   const bg =
-    threshold === 1 ? "#dc2626"   // red
-    : threshold === 3 ? "#f97316" // orange
-    : "#f59e0b";                  // amber
+    isTrial ? "#dc2626"            // red — trial countdown is always urgent
+    : threshold === 1 ? "#dc2626"  // red
+    : threshold === 3 ? "#f97316"  // orange
+    : "#f59e0b";                   // amber
 
   return (
     <div
