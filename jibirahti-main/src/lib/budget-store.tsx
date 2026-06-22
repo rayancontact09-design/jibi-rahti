@@ -284,7 +284,7 @@ export function BudgetProvider({ children }: { children: ReactNode }) {
     if (!userId || !initialized.current) return;
     const snap = {
       id: userId,
-      email: user?.email ?? null,
+  
       lang: state.lang,
       income: state.income,
       savings: state.savings,

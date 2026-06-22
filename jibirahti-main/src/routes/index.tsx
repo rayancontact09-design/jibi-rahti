@@ -31,13 +31,13 @@ const T: Record<Lang, Record<string, string>> = {
       "JIBI RAHTI vous aide à suivre vos dépenses, épargner intelligemment et atteindre vos objectifs financiers — directement depuis votre téléphone.",
     heroCta1: "Commencer gratuitement",
     heroCta2: "Installer l'application",
-    heroNote: "✨ Essai gratuit de 2 heures · Aucune carte requise",
+    heroNote: "✨ Essai gratuit de 2 heures pour découvrir l'application",
     heroBadge: "Disponible gratuitement maintenant",
-    trialBadge: "✨ Essai gratuit de 2 heures",
+    trialBadge: "✨ Essai gratuit de 2 heures pour découvrir l'application",
     priceMonthlyLabel: "Abonnement mensuel",
-    priceMonthlyValue: "30 DH / mois",
+    priceMonthlyValue: "💰 30 DH / mois",
     priceYearlyLabel: "Abonnement annuel",
-    priceYearlyValue: "200 DH / an",
+    priceYearlyValue: "💰 200 DH / an",
     whatsappActivationFast: "Activation rapide via WhatsApp",
     featTitle: "Tout ce dont vous avez besoin",
     featSub: "Des outils simples et puissants pour maîtriser vos finances personnelles",
@@ -101,13 +101,13 @@ const T: Record<Lang, Record<string, string>> = {
       "جيبي راحتي يساعدك على تتبع نفقاتك، الادخار بذكاء وتحقيق أهدافك المالية — مباشرة من هاتفك.",
     heroCta1: "ابدأ مجاناً",
     heroCta2: "تثبيت التطبيق",
-    heroNote: "✨ تجربة مجانية لمدة ساعتين · بدون بطاقة بنكية",
+    heroNote: "✨ تجربة مجانية لمدة ساعتين لاكتشاف التطبيق",
     heroBadge: "متاح الآن مجاناً",
-    trialBadge: "✨ تجربة مجانية لمدة ساعتين",
+    trialBadge: "✨ تجربة مجانية لمدة ساعتين لاكتشاف التطبيق",
     priceMonthlyLabel: "اشتراك شهري",
-    priceMonthlyValue: "30 درهم / شهرياً",
+    priceMonthlyValue: "💰 30 درهم / شهرياً",
     priceYearlyLabel: "اشتراك سنوي",
-    priceYearlyValue: "200 درهم / سنوياً",
+    priceYearlyValue: "💰 200 درهم / سنوياً",
     whatsappActivationFast: "تفعيل سريع عبر واتساب",
     featTitle: "كل ما تحتاجه",
     featSub: "أدوات بسيطة وقوية للتحكم الكامل في أموالك الشخصية",
@@ -316,6 +316,7 @@ function LandingPage() {
           </button>
         </div>
 
+        <p className="text-sm font-bold mb-1" style={{ color: "#0F766E" }}>{C.priceMonthlyValue}</p>
         <p className="text-xs text-muted-foreground">{C.heroNote}</p>
 
         <div className="flex items-center justify-center gap-5 mt-8 flex-wrap">
