@@ -172,7 +172,7 @@ export const translations: Record<Lang, Record<string, string>> = {
     trialTimeLeft: "Il vous reste {time}",
     trialExpiredTitle: "Essai terminé",
     trialExpiredMsg: "Votre essai est terminé. Entrez un code d'activation pour continuer.",
-    priceMonthlyLine: "Abonnement : 30 DH / mois",
+    priceMonthlyLine: "Abonnement : 40 DH / mois",
     trialDurationLine: "Essai gratuit : 2 heures",
 
     // ── Admin ─────────────────────────────────────────────────────────────────
@@ -453,7 +453,7 @@ export const translations: Record<Lang, Record<string, string>> = {
     trialTimeLeft: "تبقى لك {time}",
     trialExpiredTitle: "انتهت التجربة",
     trialExpiredMsg: "انتهت فترتك التجريبية. أدخل رمز التفعيل للمتابعة.",
-    priceMonthlyLine: "الاشتراك: 30 درهم / شهرياً",
+    priceMonthlyLine: "الاشتراك: 40 درهم / شهرياً",
     trialDurationLine: "تجربة مجانية: ساعتان",
 
     // ── Admin ─────────────────────────────────────────────────────────────────
