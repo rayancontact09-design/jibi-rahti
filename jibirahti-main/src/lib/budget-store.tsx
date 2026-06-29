@@ -497,7 +497,7 @@ export function useBudget() {
 }
 
 export function formatMAD(n: number, lang: Lang, currency: Currency = "MAD") {
-  const s = n.toLocaleString(lang === "ar" ? "ar-MA" : "fr-MA", {
+  const s = n.toLocaleString(lang === "ar" ? "ar-MA" : lang === "en" ? "en-US" : "fr-MA", {
     maximumFractionDigits: 2,
   });
   return `${s} ${CURRENCY_SYMBOLS[currency]}`;

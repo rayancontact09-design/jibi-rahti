@@ -9,7 +9,7 @@ export function LangSwitcher({
 }) {
   return (
     <div className="inline-flex items-center gap-0.5 rounded-xl bg-accent/40 p-0.5">
-      {(["fr", "ar"] as Lang[]).map((l) => (
+      {(["fr", "ar", "en"] as Lang[]).map((l) => (
         <button
           key={l}
           type="button"
@@ -21,7 +21,7 @@ export function LangSwitcher({
           }`}
           style={{ fontFamily: "'Poppins', sans-serif" }}
         >
-          {l === "fr" ? "FR" : "AR"}
+          {l === "fr" ? "🇫🇷 FR" : l === "ar" ? "🇦🇪 AR" : "🇬🇧 EN"}
         </button>
       ))}
     </div>

@@ -10,7 +10,7 @@ export const Route = createFileRoute("/privacy")({
 const WHATSAPP = "https://wa.me/212644411059";
 const EMAIL = "mailto:contact@jibirahti.com";
 
-type Lang = "fr" | "ar";
+type Lang = "fr" | "ar" | "en";
 const C: Record<Lang, {
   title: string; subtitle: string; updated: string;
   sections: { title: string; body: string }[];
@@ -86,6 +86,40 @@ const C: Record<Lang, {
     contactLink: "اتصل بنا",
     rights: "جميع الحقوق محفوظة.",
   },
+  en: {
+    title: "Privacy Policy",
+    subtitle: "Your privacy is our priority.",
+    updated: "Last updated: June 2025",
+    sections: [
+      {
+        title: "Data stored",
+        body: "JIBI RAHTI uses Supabase to securely store your account information (email, language preferences, settings) encrypted in the cloud.",
+      },
+      {
+        title: "Your data belongs to you",
+        body: "Your financial data — income, expenses, savings and reports — belongs exclusively to you. We do not access, analyze, or share it.",
+      },
+      {
+        title: "Use of data",
+        body: "Your data is used solely to provide you with budget management, expense tracking, and report generation features within the app.",
+      },
+      {
+        title: "We do not sell your data",
+        body: "JIBI RAHTI never sells, rents, or shares your personal or financial data with third parties, advertisers, or business partners.",
+      },
+      {
+        title: "Account deletion",
+        body: "You can request the complete deletion of your account and all your data at any time by contacting us via WhatsApp or email.",
+      },
+    ],
+    contactTitle: "Contact us",
+    contactDesc: "For any question regarding your privacy or to request deletion of your data, contact us directly.",
+    backHome: "Back to home",
+    privacyLink: "Privacy",
+    termsLink: "Terms",
+    contactLink: "Contact",
+    rights: "All rights reserved.",
+  },
 };
 
 function PrivacyPage() {
@@ -93,7 +127,7 @@ function PrivacyPage() {
   const isAr = lang === "ar";
   const dir = isAr ? "rtl" : "ltr";
   const font = isAr ? "'Cairo', sans-serif" : "'Poppins', sans-serif";
-  const t = C[isAr ? "ar" : "fr"];
+  const t = C[lang];
   const BackArrow = isAr ? ArrowRight : ArrowLeft;
 
   return (

@@ -10,7 +10,7 @@ export const Route = createFileRoute("/contact")({
 const WHATSAPP = "https://wa.me/212644411059";
 const EMAIL = "mailto:contact@jibirahti.com";
 
-type Lang = "fr" | "ar";
+type Lang = "fr" | "ar" | "en";
 const C: Record<Lang, {
   title: string; subtitle: string; desc: string;
   whatsappLabel: string; emailLabel: string;
@@ -56,6 +56,24 @@ const C: Record<Lang, {
     contactLink: "اتصل بنا",
     rights: "جميع الحقوق محفوظة.",
   },
+  en: {
+    title: "Contact us",
+    subtitle: "We're here to help.",
+    desc: "For activation codes, technical support, or any other question, contact us directly via WhatsApp or email.",
+    whatsappLabel: "WhatsApp: +212 644411059",
+    emailLabel: "contact@jibirahti.com",
+    availTitle: "Availability",
+    availDesc: "We usually reply within 24 hours. WhatsApp remains the fastest method.",
+    activationTitle: "Activation codes",
+    activationDesc: "To get your activation code after the trial period, contact us on WhatsApp. We send your code as soon as payment is confirmed.",
+    supportTitle: "Technical support",
+    supportDesc: "For any technical issue, bug, or question about using the app, describe your problem via WhatsApp message or email.",
+    backHome: "Back to home",
+    privacyLink: "Privacy",
+    termsLink: "Terms",
+    contactLink: "Contact",
+    rights: "All rights reserved.",
+  },
 };
 
 function ContactPage() {
@@ -63,7 +81,7 @@ function ContactPage() {
   const isAr = lang === "ar";
   const dir = isAr ? "rtl" : "ltr";
   const font = isAr ? "'Cairo', sans-serif" : "'Poppins', sans-serif";
-  const t = C[isAr ? "ar" : "fr"];
+  const t = C[lang];
   const BackArrow = isAr ? ArrowRight : ArrowLeft;
 
   return (

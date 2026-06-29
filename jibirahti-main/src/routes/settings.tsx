@@ -431,7 +431,7 @@ function SettingsPage() {
 
   const createdAt = user?.created_at
     ? new Date(user.created_at).toLocaleDateString(
-        lang === "ar" ? "ar-MA" : "fr-FR",
+        lang === "ar" ? "ar-MA" : lang === "en" ? "en-US" : "fr-FR",
         { day: "numeric", month: "long", year: "numeric" }
       )
     : null;
@@ -507,7 +507,7 @@ function SettingsPage() {
               {t("subscriptionExpiry")}:{" "}
               <span className="font-semibold">
                 {new Date(subscriptionExpiresAt).toLocaleDateString(
-                  lang === "ar" ? "ar-MA" : "fr-FR",
+                  lang === "ar" ? "ar-MA" : lang === "en" ? "en-US" : "fr-FR",
                   { day: "numeric", month: "long", year: "numeric" }
                 )}
               </span>
@@ -567,15 +567,15 @@ function SettingsPage() {
 
       <Card className="p-4 mb-4">
         <Label className="mb-2 block">{t("language")}</Label>
-        <div className="grid grid-cols-2 gap-2">
-          {(["fr", "ar"] as Lang[]).map((l) => (
+        <div className="grid grid-cols-3 gap-2">
+          {(["ar", "fr", "en"] as Lang[]).map((l) => (
             <Button
               key={l}
               type="button"
               variant={lang === l ? "default" : "outline"}
               onClick={() => setLang(l)}
             >
-              {l === "fr" ? "Français" : "العربية"}
+              {l === "ar" ? "🇦🇪 العربية" : l === "fr" ? "🇫🇷 Français" : "🇬🇧 English"}
             </Button>
           ))}
         </div>

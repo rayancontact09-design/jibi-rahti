@@ -16,7 +16,7 @@ export const Route = createFileRoute("/")({
 
 // ── Bilingual content ──────────────────────────────────────────────────────────
 
-type Lang = "fr" | "ar";
+type Lang = "fr" | "ar" | "en";
 
 const T: Record<Lang, Record<string, string>> = {
   fr: {
@@ -88,6 +88,14 @@ const T: Record<Lang, Record<string, string>> = {
     q5a: "JIBI RAHTI est une Progressive Web App (PWA). Vous pouvez consulter vos données enregistrées hors ligne. La synchronisation avec le cloud s'effectue automatiquement à la reconnexion.",
     footerTagline: "Gérez votre budget en toute sérénité.",
     footerRights: "Tous droits réservés.",
+    dataEncrypted: "Données chiffrées",
+    noAds: "Sans publicités",
+    offlineMode: "Mode hors-ligne",
+    readyTitle: "Prêt à commencer ?",
+    faqOtherQuestions: "Vous avez d'autres questions ?",
+    footerPrivacy: "Confidentialité",
+    footerTerms: "Conditions",
+    footerContact: "Contact",
   },
   ar: {
     navFeatures: "المميزات",
@@ -158,6 +166,93 @@ const T: Record<Lang, Record<string, string>> = {
     q5a: "جيبي راحتي هو تطبيق ويب تقدمي (PWA). يمكنك عرض بياناتك المحفوظة بدون إنترنت، وتتم المزامنة تلقائياً عند إعادة الاتصال.",
     footerTagline: "أدِّر ميزانيتك بكل راحة.",
     footerRights: "جميع الحقوق محفوظة.",
+    dataEncrypted: "بيانات مشفرة",
+    noAds: "بدون إعلانات",
+    offlineMode: "يعمل بدون إنترنت",
+    readyTitle: "هل أنت مستعد؟",
+    faqOtherQuestions: "لم تجد إجابتك؟",
+    footerPrivacy: "الخصوصية",
+    footerTerms: "الشروط",
+    footerContact: "اتصل بنا",
+  },
+
+  en: {
+    navFeatures: "Features",
+    navHow: "How it works",
+    navPricing: "Pricing",
+    navFaq: "FAQ",
+    navLogin: "Sign in",
+    heroLine1: "Manage your budget",
+    heroLine2: "simply and smartly",
+    heroDesc:
+      "JIBI RAHTI helps you track your expenses, save smartly and reach your financial goals — directly from your phone.",
+    heroCta1: "Start for free",
+    heroCta2: "Install the app",
+    heroNote: "✨ Free 2-hour trial to discover the app",
+    heroBadge: "Available for free now",
+    trialBadge: "✨ Free 2-hour trial to discover the app",
+    priceMonthlyLabel: "Monthly subscription",
+    priceMonthlyValue: "💰 40 DH / month",
+    priceYearlyLabel: "Annual subscription",
+    priceYearlyValue: "💰 250 DH / year",
+    whatsappActivationFast: "Quick activation via WhatsApp",
+    featTitle: "Everything you need",
+    featSub: "Simple, powerful tools to master your personal finances",
+    f1t: "Expense management",
+    f1d: "Record and categorize every expense in seconds.",
+    f2t: "Additional income",
+    f2d: "Add multiple income sources for accurate tracking.",
+    f3t: "Savings & goals",
+    f3d: "Set your goals and track your progress every month.",
+    f4t: "PDF reports",
+    f4d: "Export detailed reports and share them in one click.",
+    f5t: "Smart notifications",
+    f5d: "Real-time alerts for budget overruns and expiry reminders.",
+    f6t: "Installable app",
+    f6d: "Install JIBI RAHTI on your phone like a native app.",
+    howTitle: "How does it work?",
+    howSub: "Start managing your finances in 4 simple steps",
+    h1t: "Create an account",
+    h1d: "Sign up for free in under a minute.",
+    h2t: "Free 2-hour trial",
+    h2d: "Explore every feature, no commitment or card required.",
+    h3t: "Activate with a code",
+    h3d: "Get your activation code via WhatsApp and activate your account.",
+    h4t: "Track your budget",
+    h4d: "Manage your finances, reach your goals and save smartly.",
+    planTitle: "A simple, transparent subscription",
+    planSub: "No card required to start your free trial",
+    p1t: "Free trial",
+    p1d: "2 hours to test every feature, no commitment.",
+    p2t: "Activation by code",
+    p2d: "Receive your unique activation code via WhatsApp after payment.",
+    p3t: "Easy renewal",
+    p3d: "Renew your subscription (40 DH/month or 250 DH/year) directly via WhatsApp.",
+    ctaWhatsapp: "Contact on WhatsApp",
+    planCta: "Start the free trial",
+    planCtaSub: "2 hours free, then contact us via WhatsApp",
+    faqTitle: "Frequently asked questions",
+    faqSub: "Everything you need to know before getting started",
+    q1q: "How do I install the app on my phone?",
+    q1a: "Open the site in Chrome (Android) or Safari (iPhone). A banner \"Add to Home Screen\" will appear, or click the \"Install app\" button. The app will install like a native app.",
+    q2q: "How do I get an activation code?",
+    q2a: "After your free 2-hour trial, contact us on WhatsApp at +212 644411059 to activate your subscription (40 DH/month or 250 DH/year). We'll send you your activation code once payment is confirmed.",
+    q3q: "How do I export my report as a PDF?",
+    q3a: "In the Report section, tap the \"Export PDF\" button. The report is generated with all your data for the month and downloaded directly to your device.",
+    q4q: "Is my financial data secure?",
+    q4a: "Yes, absolutely. All your data is encrypted and securely stored in the cloud via Supabase. You can access your data from any device.",
+    q5q: "Does the app work without an internet connection?",
+    q5a: "JIBI RAHTI is a Progressive Web App (PWA). You can view your saved data offline. Syncing with the cloud happens automatically when you reconnect.",
+    footerTagline: "Manage your budget with peace of mind.",
+    footerRights: "All rights reserved.",
+    dataEncrypted: "Encrypted data",
+    noAds: "No ads",
+    offlineMode: "Offline mode",
+    readyTitle: "Ready to get started?",
+    faqOtherQuestions: "Have more questions?",
+    footerPrivacy: "Privacy",
+    footerTerms: "Terms",
+    footerContact: "Contact",
   },
 };
 
@@ -172,7 +267,7 @@ function LandingPage() {
   const isAr = lang === "ar";
   const dir = isAr ? "rtl" : "ltr";
   const font = isAr ? "'Cairo', sans-serif" : "'Poppins', sans-serif";
-  const C = T[isAr ? "ar" : "fr"];
+  const C = T[lang];
 
   useEffect(() => {
     if (!loading && user) navigate({ to: "/dashboard" });
@@ -321,9 +416,9 @@ function LandingPage() {
 
         <div className="flex items-center justify-center gap-5 mt-8 flex-wrap">
           {[
-            { icon: Shield,     label: isAr ? "بيانات مشفرة"     : "Données chiffrées" },
-            { icon: Check,      label: isAr ? "بدون إعلانات"      : "Sans publicités" },
-            { icon: Smartphone, label: isAr ? "يعمل بدون إنترنت" : "Mode hors-ligne" },
+            { icon: Shield,     label: C.dataEncrypted },
+            { icon: Check,      label: C.noAds },
+            { icon: Smartphone, label: C.offlineMode },
           ].map(({ icon: Icon, label }) => (
             <div key={label} className="flex items-center gap-1.5 text-xs text-muted-foreground">
               <Icon className="h-3.5 w-3.5 text-primary" />
@@ -447,7 +542,7 @@ function LandingPage() {
           <div className="rounded-3xl p-7 text-center shadow-elegant"
             style={{ background: "linear-gradient(135deg,#0F8B7E 0%,#1FAF8B 50%,#34D399 100%)" }}>
             <h3 className="text-lg font-extrabold text-white mb-2">
-              {isAr ? "هل أنت مستعد؟" : "Prêt à commencer ?"}
+              {C.readyTitle}
             </h3>
             <p className="text-white/80 text-sm mb-5">{C.planCtaSub}</p>
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
@@ -511,7 +606,7 @@ function LandingPage() {
           <div className="mt-8 text-center rounded-2xl p-6 border border-border/40"
             style={{ background: "rgba(255,255,255,0.6)" }}>
             <p className="text-sm font-semibold text-foreground mb-3">
-              {isAr ? "لم تجد إجابتك؟" : "Vous avez d'autres questions ?"}
+              {C.faqOtherQuestions}
             </p>
             <a href="https://wa.me/212644411059"
               target="_blank" rel="noopener noreferrer"
@@ -560,15 +655,15 @@ function LandingPage() {
           <div className="mt-8 pt-5 border-t border-white/10 flex flex-col items-center gap-3">
             <div className="flex items-center gap-4 flex-wrap justify-center">
               <Link to="/privacy" className="text-xs text-white/50 hover:text-white/70 transition-colors">
-                {isAr ? "الخصوصية" : "Confidentialité"}
+                {C.footerPrivacy}
               </Link>
               <span className="text-white/20 text-xs">·</span>
               <Link to="/terms" className="text-xs text-white/50 hover:text-white/70 transition-colors">
-                {isAr ? "الشروط" : "Conditions"}
+                {C.footerTerms}
               </Link>
               <span className="text-white/20 text-xs">·</span>
               <Link to="/contact" className="text-xs text-white/50 hover:text-white/70 transition-colors">
-                {isAr ? "اتصل بنا" : "Contact"}
+                {C.footerContact}
               </Link>
             </div>
             <p className="text-xs text-white/35">

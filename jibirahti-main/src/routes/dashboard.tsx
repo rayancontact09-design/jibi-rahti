@@ -240,10 +240,10 @@ function DashboardPage() {
                 </div>
                 <div className={`flex-1 ${lang === "ar" ? "text-right" : "text-left"}`}>
                   <p className="text-sm font-bold text-[#065F46]" style={{ fontFamily: arFont }}>
-                    {lang === "ar" ? "أحسنت! أنت داخل الميزانية" : "Bravo ! Vous êtes dans le budget"}
+                    {t("dashGreatJobTitle")}
                   </p>
                   <p className="text-[11px] text-[#047857]/80 mt-0.5" style={{ fontFamily: arFont }}>
-                    {lang === "ar" ? "استمر على هذا الإيقاع لتحقيق أهدافك المالية" : "Continuez ainsi pour atteindre vos objectifs"}
+                    {t("dashGreatJobDesc")}
                   </p>
                 </div>
               </Card>
@@ -334,7 +334,7 @@ function DashboardPage() {
                   <div className="flex-1">
                     <div className={`flex items-center gap-2 ${lang === "ar" ? "flex-row-reverse" : ""}`}>
                       <p className="text-sm font-bold" style={{ fontFamily: arFont }}>
-                        {lang === "ar" ? "المساعد المالي الذكي" : "Assistant financier intelligent"}
+                        {t("aiAssistantTitle")}
                       </p>
                       <span className="text-[9px] uppercase tracking-widest font-bold px-1.5 py-0.5 rounded-full bg-primary/15 text-primary">AI</span>
                     </div>
@@ -343,30 +343,22 @@ function DashboardPage() {
                         const savingsPct = income > 0 ? (savings / income) * 100 : 0;
                         const expensePct = income > 0 ? (totalExpenses / income) * 100 : 0;
                         if (balanceStatus === "negative") {
-                          return lang === "ar"
-                            ? "تجاوزت ميزانيتك. ركّز على تقليل المصاريف غير الأساسية الأسبوع القادم."
-                            : "Vous avez dépassé votre budget. Réduisez les dépenses non essentielles cette semaine.";
+                          return t("aiInsightOverBudget");
                         }
                         if (savingsPct >= 20) {
-                          return lang === "ar"
-                            ? "ممتاز! نسبة ادخارك صحية. حافظ على هذا الإيقاع لبناء ثروتك."
-                            : "Excellent ! Votre taux d'épargne est sain. Continuez ainsi.";
+                          return t("aiInsightGoodSavings");
                         }
                         if (expensePct > 70) {
-                          return lang === "ar"
-                            ? "مصاريفك مرتفعة هذا الشهر. جرّب قاعدة 50/30/20 للتوازن."
-                            : "Vos dépenses sont élevées. Essayez la règle 50/30/20.";
+                          return t("aiInsightHighExpense");
                         }
-                        return lang === "ar"
-                          ? "ميزانيتك متوازنة. حاول رفع الادخار بنسبة 5% لتحقيق أهدافك أسرع."
-                          : "Budget équilibré. Augmentez l'épargne de 5% pour atteindre vos objectifs plus vite.";
+                        return t("aiInsightBalanced");
                       })()}
                     </p>
                     <Link
                       to="/report"
                       className={`mt-3 inline-flex items-center gap-1 text-xs font-semibold text-primary group ${lang === "ar" ? "flex-row-reverse" : ""}`}
                     >
-                      <span style={{ fontFamily: arFont }}>{lang === "ar" ? "تحليل أعمق" : "Analyse complète"}</span>
+                      <span style={{ fontFamily: arFont }}>{t("fullAnalysisLink")}</span>
                       <ArrowUpRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
                     </Link>
                   </div>

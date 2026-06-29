@@ -29,17 +29,23 @@ export function computeAccountStatus(
 
 export function formatTimeRemaining(expiresAt: string, lang: Lang, now: Date = new Date()): string {
   const diff = new Date(expiresAt).getTime() - now.getTime();
-  if (diff <= 0) return lang === "ar" ? "منتهي" : "Expiré";
+  if (diff <= 0) return lang === "ar" ? "منتهي" : lang === "en" ? "Expired" : "Expiré";
   const hours = Math.floor(diff / (1000 * 60 * 60));
   const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
   if (hours >= 48) {
     const days = Math.floor(hours / 24);
-    return lang === "ar" ? `${days} يوم` : `${days} jour${days > 1 ? "s" : ""}`;
+    return lang === "ar"
+      ? `${days} يوم`
+      : lang === "en"
+        ? `${days} day${days > 1 ? "s" : ""}`
+        : `${days} jour${days > 1 ? "s" : ""}`;
   }
   if (hours > 0) {
     return lang === "ar"
       ? `${hours} ساعة و ${minutes} دقيقة`
-      : `${hours}h ${minutes}min`;
+      : lang === "en"
+        ? `${hours}h ${minutes}min`
+        : `${hours}h ${minutes}min`;
   }
   return lang === "ar" ? `${minutes} دقيقة` : `${minutes} min`;
 }

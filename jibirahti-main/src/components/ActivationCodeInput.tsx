@@ -30,7 +30,7 @@ export function ActivationCodeInput() {
       setResult({ success: false, message: errorMap[data.error] ?? t("codeErrNotFound") });
     } else {
       const expDate = new Date(data.expires_at).toLocaleDateString(
-        lang === "ar" ? "ar-MA" : "fr-FR",
+        lang === "ar" ? "ar-MA" : lang === "en" ? "en-US" : "fr-FR",
         { day: "numeric", month: "long", year: "numeric" }
       );
       setResult({ success: true, message: t("codeSuccess").replace("{date}", expDate) });

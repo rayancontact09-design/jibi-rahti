@@ -10,7 +10,7 @@ export const Route = createFileRoute("/terms")({
 const WHATSAPP = "https://wa.me/212644411059";
 const EMAIL = "mailto:contact@jibirahti.com";
 
-type Lang = "fr" | "ar";
+type Lang = "fr" | "ar" | "en";
 const C: Record<Lang, {
   title: string; subtitle: string; updated: string;
   sections: { title: string; body: string }[];
@@ -86,6 +86,40 @@ const C: Record<Lang, {
     contactLink: "اتصل بنا",
     rights: "جميع الحقوق محفوظة.",
   },
+  en: {
+    title: "Terms of Use",
+    subtitle: "By using JIBI RAHTI, you agree to these terms.",
+    updated: "Last updated: June 2025",
+    sections: [
+      {
+        title: "About the app",
+        body: "JIBI RAHTI is a personal budget management and expense tracking app. It is intended for individual, personal use.",
+      },
+      {
+        title: "User responsibility",
+        body: "You are solely responsible for the accuracy of the information you enter into the app. JIBI RAHTI cannot be held liable for data-entry errors or financial decisions made based on the displayed data.",
+      },
+      {
+        title: "Activation codes",
+        body: "Activation codes are strictly personal and non-transferable. Sharing, transferring, or reselling them is prohibited. Any abuse will result in account suspension.",
+      },
+      {
+        title: "Service provided as is",
+        body: "The app is provided \"as is\" without guarantee of continuous availability. We reserve the right to modify, suspend, or discontinue the service at any time, with or without notice.",
+      },
+      {
+        title: "Account suspension",
+        body: "Any abuse, fraud, unauthorized access attempt, or violation of these terms may result in immediate and permanent account suspension, without refund.",
+      },
+    ],
+    contactTitle: "Questions about the terms?",
+    contactDesc: "For any question regarding the terms of use, contact us directly via WhatsApp or email.",
+    backHome: "Back to home",
+    privacyLink: "Privacy",
+    termsLink: "Terms",
+    contactLink: "Contact",
+    rights: "All rights reserved.",
+  },
 };
 
 function TermsPage() {
@@ -93,7 +127,7 @@ function TermsPage() {
   const isAr = lang === "ar";
   const dir = isAr ? "rtl" : "ltr";
   const font = isAr ? "'Cairo', sans-serif" : "'Poppins', sans-serif";
-  const t = C[isAr ? "ar" : "fr"];
+  const t = C[lang];
   const BackArrow = isAr ? ArrowRight : ArrowLeft;
 
   return (

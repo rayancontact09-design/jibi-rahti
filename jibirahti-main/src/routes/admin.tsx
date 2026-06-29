@@ -59,7 +59,7 @@ function CodeCard({ c, statusFilter, acting, onRevoke, onArchive, onRestore, onD
   console.log(`[CodeCard] code=${c.code} customer_name="${c.customer_name}" customer_phone="${c.customer_phone}"`);
 
   const fmtDate = (d: string) =>
-    new Date(d).toLocaleDateString(lang === "ar" ? "ar-MA" : "fr-FR", {
+    new Date(d).toLocaleDateString(lang === "ar" ? "ar-MA" : lang === "en" ? "en-US" : "fr-FR", {
       day: "2-digit",
       month: "2-digit",
       year: "2-digit",
@@ -210,7 +210,7 @@ function AdminPage() {
       p_customer_phone: snapshotPhone || null,
     });
     if (error || !data?.success) {
-      toast.error(error?.message ?? data?.error ?? "Erreur");
+      toast.error(error?.message ?? data?.error ?? t("errorGeneric"));
     } else {
       setLastGenerated({
         code: data.code as string,
@@ -230,9 +230,9 @@ function AdminPage() {
     setActing(codeRow.id);
     const { data, error } = await supabase.rpc("admin_revoke_code", { p_code_id: codeRow.id });
     if (error || !data?.success) {
-      toast.error(error?.message ?? data?.error ?? "Erreur");
+      toast.error(error?.message ?? data?.error ?? t("errorGeneric"));
     } else {
-      toast.success(`Révoqué : ${codeRow.code}`);
+      toast.success(t("codeRevokedToast").replace("{code}", codeRow.code));
       await fetchCodes();
     }
     setActing(null);
@@ -242,7 +242,7 @@ function AdminPage() {
     setActing(codeRow.id);
     const { data, error } = await supabase.rpc("admin_archive_code", { p_code_id: codeRow.id });
     if (error || !data?.success) {
-      toast.error(error?.message ?? data?.error ?? "Erreur");
+      toast.error(error?.message ?? data?.error ?? t("errorGeneric"));
     } else {
       await fetchCodes();
     }
@@ -253,7 +253,7 @@ function AdminPage() {
     setActing(codeRow.id);
     const { data, error } = await supabase.rpc("admin_restore_code", { p_code_id: codeRow.id });
     if (error || !data?.success) {
-      toast.error(error?.message ?? data?.error ?? "Erreur");
+      toast.error(error?.message ?? data?.error ?? t("errorGeneric"));
     } else {
       await fetchCodes();
     }
@@ -267,9 +267,9 @@ function AdminPage() {
     setActing(codeRow.id);
     const { data, error } = await supabase.rpc("admin_delete_code", { p_code_id: codeRow.id });
     if (error || !data?.success) {
-      toast.error(error?.message ?? data?.error ?? "Erreur");
+      toast.error(error?.message ?? data?.error ?? t("errorGeneric"));
     } else {
-      toast.success(`Supprimé : ${codeRow.code}`);
+      toast.success(t("codeDeletedToast").replace("{code}", codeRow.code));
       await fetchCodes();
     }
     setActing(null);
@@ -424,7 +424,7 @@ function AdminPage() {
           <Input
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            placeholder={lang === "ar" ? "بحث…" : "Rechercher…"}
+            placeholder={t("searchPlaceholder")}
             className="pl-8 h-9 text-sm"
           />
         </div>
@@ -465,10 +465,10 @@ function AdminPage() {
       {/* Fetch error */}
       {fetchError && (
         <Card className="p-4 mb-3 border-destructive/40 bg-destructive/5">
-          <p className="text-xs font-semibold text-destructive mb-1">Erreur de chargement</p>
+          <p className="text-xs font-semibold text-destructive mb-1">{t("loadErrorTitle")}</p>
           <p className="text-xs text-muted-foreground font-mono break-all">{fetchError}</p>
           <p className="text-xs text-muted-foreground mt-2">
-            Vérifiez que la migration SQL a été exécutée dans Supabase.
+            {t("loadErrorHint")}
           </p>
         </Card>
       )}
@@ -506,7 +506,7 @@ function AdminPage() {
         </div>
       ) : filteredCodes.length === 0 ? (
         <p className="text-center text-muted-foreground py-8 text-sm">
-          {search.trim() ? (lang === "ar" ? "لا نتائج" : "Aucun résultat") : t("noExpenses")}
+          {search.trim() ? t("noResults") : t("noExpenses")}
         </p>
       ) : (
         <div className="space-y-2">

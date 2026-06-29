@@ -70,7 +70,7 @@ function ReportPage() {
 
   const pureExpenses = totalExpenses - savings; // totalExpenses includes savings
   const remaining = Math.max(0, balance);
-  const monthName = now.toLocaleDateString(isAr ? "ar-MA" : "fr-MA", { month: "long", year: "numeric" });
+  const monthName = now.toLocaleDateString(isAr ? "ar-MA" : lang === "en" ? "en-US" : "fr-MA", { month: "long", year: "numeric" });
 
   // Health score
   const healthScore = useMemo(() => {
@@ -374,7 +374,7 @@ function ReportPage() {
               </div>
               <p className="text-2xl font-extrabold mt-1" style={{ color: "#0F766E", fontFamily: arFont }}>{healthLabel}</p>
               <p className="text-[11px] text-muted-foreground mt-1" style={{ fontFamily: arFont }}>
-                {isAr ? "تقييم شامل لوضعك المالي هذا الشهر" : "Évaluation globale de votre situation"}
+                {t("healthScoreSubtitle")}
               </p>
             </div>
           </div>
@@ -414,7 +414,7 @@ function ReportPage() {
                     transform="rotate(-90 70 70)" />
                 );
               })}
-              <text x="70" y="68" textAnchor="middle" fontSize="11" fill="#64748B" fontFamily={arFont}>{isAr ? "المجموع" : "Total"}</text>
+              <text x="70" y="68" textAnchor="middle" fontSize="11" fill="#64748B" fontFamily={arFont}>{t("totalLabel")}</text>
               <text x="70" y="84" textAnchor="middle" fontSize="13" fontWeight="700" fill="#0F766E">
                 {Math.round(pureExpenses).toLocaleString()}
               </text>
@@ -501,7 +501,7 @@ function ReportPage() {
           </div>
           {insights.length === 0 ? (
             <p className={`text-xs text-muted-foreground ${isAr ? "text-right" : ""}`} style={{ fontFamily: arFont }}>
-              {isAr ? "لا توجد تنبيهات. وضعك المالي مستقر." : "Aucune alerte. Situation stable."}
+              {t("noAlertsStable")}
             </p>
           ) : (
             <ul className="space-y-2">

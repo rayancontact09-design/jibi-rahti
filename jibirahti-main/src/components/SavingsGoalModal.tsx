@@ -167,7 +167,7 @@ export function SavingsGoalModal({
               className="[&_[role=slider]]:h-5 [&_[role=slider]]:w-5 [&_[role=slider]]:border-[#0F8B7E] [&_[role=slider]]:bg-white [&>span:first-child]:bg-[#D1FAE5] [&>span:first-child>span]:bg-gradient-to-r [&>span:first-child>span]:from-[#0F8B7E] [&>span:first-child>span]:to-[#4CD4B0]"
             />
             <p className="text-[11px] text-muted-foreground mt-2">
-              ≈ {formatMAD(monthlyAmount, lang, currency)} / {lang === "ar" ? "شهرياً" : "mois"}
+              ≈ {formatMAD(monthlyAmount, lang, currency)} / {lang === "ar" ? "شهرياً" : lang === "en" ? "month" : "mois"}
             </p>
           </div>
 
