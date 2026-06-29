@@ -8,11 +8,10 @@ export function useTheme() {
       | "light"
       | "dark"
       | null;
-    const initial =
-      stored ??
-      (typeof window !== "undefined" && window.matchMedia("(prefers-color-scheme: dark)").matches
-        ? "dark"
-        : "light");
+    // Default is always "light" on first launch — never inherit the OS/browser
+    // prefers-color-scheme setting. Dark mode only applies once the user has
+    // explicitly toggled it, and that explicit choice is what gets restored here.
+    const initial = stored === "dark" ? "dark" : "light";
     setTheme(initial);
     document.documentElement.classList.toggle("dark", initial === "dark");
   }, []);
