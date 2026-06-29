@@ -29,6 +29,9 @@ export type Budgets = Record<Category, number>;
 export type { Lang };
 export type { AccountStatus };
 
+export type Currency = "MAD" | "EUR" | "USD";
+export const CURRENCY_SYMBOLS: Record<Currency, string> = { MAD: "DH", EUR: "€", USD: "$" };
+
 export type SavingsGoal = {
   name: string;
   target: number;
@@ -39,6 +42,7 @@ export type SavingsGoal = {
 
 type State = {
   lang: Lang;
+  currency: Currency;
   accountStatus: AccountStatus;
   trialExpiresAt: string | null;
   subscriptionExpiresAt: string | null;
@@ -54,6 +58,7 @@ type State = {
 
 const DEFAULT: State = {
   lang: "fr",
+  currency: "MAD",
   accountStatus: "trial",
   trialExpiresAt: null,
   subscriptionExpiresAt: null,
@@ -69,6 +74,7 @@ const DEFAULT: State = {
 
 type Ctx = State & {
   setLang: (l: Lang) => void;
+  setCurrency: (c: Currency) => void;
   setIncome: (n: number) => void;
   setBudget: (c: Category, n: number) => void;
   setSavings: (n: number) => void;
@@ -164,6 +170,7 @@ async function loadUserData(userId: string, userEmail?: string | null): Promise<
 
   return {
     lang: (profile?.lang ?? getLang()) as Lang,
+    currency: ((profile?.currency ?? "MAD") as Currency),
     accountStatus: ((profile?.account_status ?? "trial") as AccountStatus),
     trialExpiresAt,
     subscriptionExpiresAt: profile?.subscription_expires_at ?? null,
@@ -284,8 +291,9 @@ export function BudgetProvider({ children }: { children: ReactNode }) {
     if (!userId || !initialized.current) return;
     const snap = {
       id: userId,
-  
+
       lang: state.lang,
+      currency: state.currency,
       income: state.income,
       savings: state.savings,
       income_day: state.incomeDay ?? null,
@@ -296,7 +304,7 @@ export function BudgetProvider({ children }: { children: ReactNode }) {
       if (error) console.error("[jibi] profiles upsert:", error.message, error);
     }, 800);
     return () => clearTimeout(timer);
-  }, [userId, state.lang, state.income, state.savings, state.incomeDay, state.lastResetMonth]);
+  }, [userId, state.lang, state.currency, state.income, state.savings, state.incomeDay, state.lastResetMonth]);
 
   // Debounced save — budgets
   useEffect(() => {
@@ -388,6 +396,7 @@ export function BudgetProvider({ children }: { children: ReactNode }) {
       ...state,
       loading,
       setLang: (lang) => setState((s) => ({ ...s, lang })),
+      setCurrency: (currency) => setState((s) => ({ ...s, currency })),
       setIncome: (income) => setState((s) => ({ ...s, income })),
       setBudget: (c, n) => setState((s) => ({ ...s, budgets: { ...s.budgets, [c]: n } })),
       setSavings: (savings) => setState((s) => ({ ...s, savings })),
@@ -487,9 +496,9 @@ export function useBudget() {
   return ctx;
 }
 
-export function formatMAD(n: number, lang: Lang) {
+export function formatMAD(n: number, lang: Lang, currency: Currency = "MAD") {
   const s = n.toLocaleString(lang === "ar" ? "ar-MA" : "fr-MA", {
     maximumFractionDigits: 2,
   });
-  return `${s} ${tr(lang, "currency")}`;
+  return `${s} ${CURRENCY_SYMBOLS[currency]}`;
 }

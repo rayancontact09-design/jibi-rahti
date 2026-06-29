@@ -31,6 +31,7 @@ function DashboardPage() {
   const {
     t,
     lang,
+    currency,
     income,
     totalExpenses,
     balance,
@@ -280,7 +281,7 @@ function DashboardPage() {
                 <div className={lang === "ar" ? "text-right" : "text-left"}>
                   <p className="text-[11px] uppercase tracking-[0.18em] opacity-80 font-semibold" style={{ fontFamily: arFont }}>{t("balance")}</p>
                   <p className="text-4xl font-extrabold mt-2 tracking-tight drop-shadow-sm" style={{ fontFamily: arFont }}>
-                    {formatMAD(Math.max(0, balance), lang)}
+                    {formatMAD(Math.max(0, balance), lang, currency)}
                   </p>
                   <div className={`mt-2 inline-flex items-center gap-1 text-[11px] bg-white/15 backdrop-blur px-2.5 py-1 rounded-full ${lang === "ar" ? "flex-row-reverse" : ""}`}>
                     <Eye className="h-3 w-3" />
@@ -302,7 +303,7 @@ function DashboardPage() {
                     <p className="text-[11px] opacity-90 font-medium" style={{ fontFamily: arFont }}>{t("income")}</p>
                   </div>
                   <p className={`font-bold mt-1 text-sm ${lang === "ar" ? "text-right" : "text-left"}`} style={{ fontFamily: arFont }}>
-                    {formatMAD(income, lang)}
+                    {formatMAD(income, lang, currency)}
                   </p>
                 </div>
                 <div className="rounded-2xl bg-white/15 backdrop-blur-md px-3 py-3 ring-1 ring-white/20 hover:bg-white/20 transition">
@@ -313,7 +314,7 @@ function DashboardPage() {
                     <p className="text-[11px] opacity-90 font-medium" style={{ fontFamily: arFont }}>{t("totalExpenses")}</p>
                   </div>
                   <p className={`font-bold mt-1 text-sm ${lang === "ar" ? "text-right" : "text-left"}`} style={{ fontFamily: arFont }}>
-                    {formatMAD(totalExpenses, lang)}
+                    {formatMAD(totalExpenses, lang, currency)}
                   </p>
                 </div>
               </div>
@@ -435,7 +436,7 @@ function DashboardPage() {
                   </p>
                 </div>
                 <p className="text-2xl font-bold mt-1" style={{ color: accentDark, fontFamily: lang === "ar" ? "'Cairo', sans-serif" : undefined }}>
-                  {formatMAD(displaySavings, lang)}
+                  {formatMAD(displaySavings, lang, currency)}
                 </p>
                 <p className="text-xs text-muted-foreground mt-1" style={{ fontFamily: lang === "ar" ? "'Cairo', sans-serif" : undefined }}>
                   {lang === "ar" ? `تم ادخار ${pct}% ${t("savedFromIncome")}` : `${pct}% ${t("savedFromIncome")}`}
@@ -559,7 +560,7 @@ function DashboardPage() {
               <div className={`flex justify-between text-sm mb-2 ${lang === "ar" ? "flex-row-reverse" : ""}`}>
                 <span className="font-semibold" style={{ fontFamily: lang === "ar" ? "'Cairo', sans-serif" : undefined }}>{cat.name}</span>
                 <span className="text-muted-foreground text-xs">
-                  {formatMAD(spent, lang)} {max > 0 && `${t("of")} ${formatMAD(max, lang)}`}
+                  {formatMAD(spent, lang, currency)} {max > 0 && `${t("of")} ${formatMAD(max, lang, currency)}`}
                 </span>
               </div>
               {max > 0 && <Progress value={pct} className="h-2" indicatorClassName={indicatorColor} />}
@@ -595,7 +596,7 @@ function DashboardPage() {
                   </p>
                 </div>
                 <p className="font-bold text-sm text-primary" style={{ fontFamily: lang === "ar" ? "'Cairo', sans-serif" : undefined }}>
-                  −{formatMAD(e.amount, lang)}
+                  −{formatMAD(e.amount, lang, currency)}
                 </p>
                 <Button variant="ghost" size="icon" onClick={() => setHistoryOpen(true)} aria-label={t("history")}>
                   <Trash2 className="h-4 w-4 text-destructive" />
@@ -646,7 +647,7 @@ function DashboardPage() {
                                 {e.date}{e.note ? ` · ${e.note}` : ""}
                               </p>
                             </div>
-                            <p className="font-semibold">{formatMAD(e.amount, lang)}</p>
+                            <p className="font-semibold">{formatMAD(e.amount, lang, currency)}</p>
                             <Button
                               variant="ghost"
                               size="icon"
@@ -740,7 +741,7 @@ function DashboardPage() {
                       {e.date}{e.note ? ` · ${e.note}` : ""}
                     </p>
                   </div>
-                  <p className="font-semibold">{formatMAD(e.amount, lang)}</p>
+                  <p className="font-semibold">{formatMAD(e.amount, lang, currency)}</p>
                 </Card>
               ))
             )}

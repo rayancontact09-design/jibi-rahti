@@ -23,7 +23,7 @@ type DynCategory = { id: string; name: string; budget: number };
 
 function ReportPage() {
   const {
-    t, lang, effectiveIncome, expenses, savings, effectiveSavings,
+    t, lang, currency, effectiveIncome, expenses, savings, effectiveSavings,
     totalExpenses, balance,
   } = useBudget();
   const { user } = useAuth();
@@ -113,7 +113,7 @@ function ReportPage() {
   const recommendations: string[] = [];
   if (topCat && topCat.value > 0) {
     recommendations.push(
-      t("recReduceCategory").replace("{cat}", topCat.name).replace("{amt}", formatMAD(topCat.value * 0.1, lang))
+      t("recReduceCategory").replace("{cat}", topCat.name).replace("{amt}", formatMAD(topCat.value * 0.1, lang, currency))
     );
   }
   if (effectiveIncome > 0 && effectiveSavings / effectiveIncome < 0.2) recommendations.push(t("recIncreaseSavings"));
@@ -131,16 +131,16 @@ function ReportPage() {
   const buildReportText = () => [
     `${t("monthlyReport")} — ${monthName}`,
     "",
-    `${t("totalRevenue")}: ${formatMAD(effectiveIncome, lang)}`,
-    `${t("totalExpenses")}: ${formatMAD(pureExpenses, lang)}`,
-    `${t("monthlySavings")}: ${formatMAD(Math.max(0, effectiveSavings), lang)}`,
-    `${t("balance")}: ${formatMAD(remaining, lang)}`,
+    `${t("totalRevenue")}: ${formatMAD(effectiveIncome, lang, currency)}`,
+    `${t("totalExpenses")}: ${formatMAD(pureExpenses, lang, currency)}`,
+    `${t("monthlySavings")}: ${formatMAD(Math.max(0, effectiveSavings), lang, currency)}`,
+    `${t("balance")}: ${formatMAD(remaining, lang, currency)}`,
     `${t("healthScore")}: ${healthScore}/100 (${healthLabel})`,
     "",
     t("expenseAnalytics") + ":",
     ...catData
       .filter(d => d.value > 0)
-      .map(d => `  • ${d.name}: ${formatMAD(d.value, lang)} (${Math.round(d.pct)}%)`),
+      .map(d => `  • ${d.name}: ${formatMAD(d.value, lang, currency)} (${Math.round(d.pct)}%)`),
   ].join("\n");
 
   const handleCopy = async () => {
@@ -386,10 +386,10 @@ function ReportPage() {
             {t("financialSummary")}
           </h2>
           <div className="grid grid-cols-2 gap-2.5">
-            <SummaryCard icon={TrendingUp} label={t("totalRevenue")} value={formatMAD(effectiveIncome, lang)} color="#1FAF8B" bg="linear-gradient(135deg,#ECFDF5,#D1FAE5)" />
-            <SummaryCard icon={TrendingDown} label={t("totalExpenses")} value={formatMAD(pureExpenses, lang)} color="#E53935" bg="linear-gradient(135deg,#FFF5F5,#FFE5E5)" />
-            <SummaryCard icon={PiggyBank} label={t("monthlySavings")} value={formatMAD(Math.max(0, effectiveSavings), lang)} color="#0F8B7E" bg="linear-gradient(135deg,#F4FBF8,#E8F5F0)" />
-            <SummaryCard icon={Wallet} label={t("balance")} value={formatMAD(remaining, lang)} color="#F59E0B" bg="linear-gradient(135deg,#FFFBEB,#FEF3C7)" />
+            <SummaryCard icon={TrendingUp} label={t("totalRevenue")} value={formatMAD(effectiveIncome, lang, currency)} color="#1FAF8B" bg="linear-gradient(135deg,#ECFDF5,#D1FAE5)" />
+            <SummaryCard icon={TrendingDown} label={t("totalExpenses")} value={formatMAD(pureExpenses, lang, currency)} color="#E53935" bg="linear-gradient(135deg,#FFF5F5,#FFE5E5)" />
+            <SummaryCard icon={PiggyBank} label={t("monthlySavings")} value={formatMAD(Math.max(0, effectiveSavings), lang, currency)} color="#0F8B7E" bg="linear-gradient(135deg,#F4FBF8,#E8F5F0)" />
+            <SummaryCard icon={Wallet} label={t("balance")} value={formatMAD(remaining, lang, currency)} color="#F59E0B" bg="linear-gradient(135deg,#FFFBEB,#FEF3C7)" />
           </div>
         </div>
 
@@ -468,7 +468,7 @@ function ReportPage() {
                       <div className={`flex justify-between text-[11px] mb-1 ${isAr ? "flex-row-reverse" : ""}`}>
                         <span style={{ fontFamily: arFont, color: "#0F766E" }} className="font-medium">{cat.name}</span>
                         <span className="text-muted-foreground tabular-nums">
-                          {formatMAD(cur, lang)} / {formatMAD(old, lang)}
+                          {formatMAD(cur, lang, currency)} / {formatMAD(old, lang, currency)}
                         </span>
                       </div>
                       <div className="flex items-center gap-1">

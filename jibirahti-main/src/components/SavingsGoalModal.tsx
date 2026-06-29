@@ -3,7 +3,7 @@ import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
-import { useBudget, formatMAD } from "@/lib/budget-store";
+import { useBudget, formatMAD, CURRENCY_SYMBOLS } from "@/lib/budget-store";
 import { Target, Calendar, Sparkles, Upload, TrendingUp, Clock } from "lucide-react";
 import { trackSavingsGoalCreated } from "@/lib/analytics";
 
@@ -14,7 +14,7 @@ export function SavingsGoalModal({
   open: boolean;
   onOpenChange: (v: boolean) => void;
 }) {
-  const { t, lang, income, savings, savingsGoal, setSavingsGoal, setSavings } = useBudget();
+  const { t, lang, currency, income, savings, savingsGoal, setSavingsGoal, setSavings } = useBudget();
   const arFont = lang === "ar" ? "'Cairo', sans-serif" : "'Poppins', sans-serif";
   const rtl = lang === "ar";
 
@@ -133,7 +133,7 @@ export function SavingsGoalModal({
                 style={{ textAlign: rtl ? "right" : "left" }}
               />
               <span className={`absolute top-1/2 -translate-y-1/2 text-xs font-bold text-[#0F8B7E] ${rtl ? "left-3" : "right-3"}`}>
-                {t("currency")}
+                {CURRENCY_SYMBOLS[currency]}
               </span>
             </div>
           </div>
@@ -167,7 +167,7 @@ export function SavingsGoalModal({
               className="[&_[role=slider]]:h-5 [&_[role=slider]]:w-5 [&_[role=slider]]:border-[#0F8B7E] [&_[role=slider]]:bg-white [&>span:first-child]:bg-[#D1FAE5] [&>span:first-child>span]:bg-gradient-to-r [&>span:first-child>span]:from-[#0F8B7E] [&>span:first-child>span]:to-[#4CD4B0]"
             />
             <p className="text-[11px] text-muted-foreground mt-2">
-              ≈ {formatMAD(monthlyAmount, lang)} / {lang === "ar" ? "شهرياً" : "mois"}
+              ≈ {formatMAD(monthlyAmount, lang, currency)} / {lang === "ar" ? "شهرياً" : "mois"}
             </p>
           </div>
 
@@ -203,7 +203,7 @@ export function SavingsGoalModal({
                   <TrendingUp className="h-3 w-3" />
                   {t("remainingAmount")}
                 </div>
-                <p className="text-sm font-bold text-[#0F766E] mt-0.5">{formatMAD(remaining, lang)}</p>
+                <p className="text-sm font-bold text-[#0F766E] mt-0.5">{formatMAD(remaining, lang, currency)}</p>
               </div>
               <div className="rounded-xl bg-white p-2.5">
                 <div className="flex items-center gap-1 text-[10px] text-muted-foreground">

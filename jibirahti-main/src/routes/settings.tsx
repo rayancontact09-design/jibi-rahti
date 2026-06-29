@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useBudget, Lang, formatMAD, type AdditionalIncome } from "@/lib/budget-store";
+import { useBudget, Lang, Currency, formatMAD, type AdditionalIncome } from "@/lib/budget-store";
 import { useAuth } from "@/lib/auth";
 import { supabase } from "@/lib/supabase";
 import { AppShell } from "@/components/BottomNav";
@@ -268,7 +268,7 @@ function CategorySection({
 
 function AdditionalIncomeSection() {
   const {
-    t, lang,
+    t, lang, currency,
     additionalIncomes, additionalIncomeThisMonth,
     addAdditionalIncome, updateAdditionalIncome, removeAdditionalIncome,
   } = useBudget();
@@ -315,7 +315,7 @@ function AdditionalIncomeSection() {
     <>
       <div className="flex items-center justify-between mb-3">
         <span className="text-xs text-muted-foreground">{t("additionalIncomeThisMonth")}</span>
-        <span className="text-sm font-bold text-primary">{formatMAD(additionalIncomeThisMonth, lang)}</span>
+        <span className="text-sm font-bold text-primary">{formatMAD(additionalIncomeThisMonth, lang, currency)}</span>
       </div>
 
       {thisMonth.length === 0 ? (
@@ -325,7 +325,7 @@ function AdditionalIncomeSection() {
           {thisMonth.map((item) => (
             <div key={item.id} className="flex items-center gap-2">
               <div className="flex-1 min-w-0">
-                <p className="text-sm font-semibold">{formatMAD(item.amount, lang)}</p>
+                <p className="text-sm font-semibold">{formatMAD(item.amount, lang, currency)}</p>
                 <p className="text-xs text-muted-foreground">{item.incomeDate}{item.note ? ` · ${item.note}` : ""}</p>
               </div>
               <button type="button" className="text-muted-foreground hover:text-primary transition-colors shrink-0" onClick={() => openEdit(item)}>
@@ -408,7 +408,7 @@ export const Route = createFileRoute("/settings")({
 
 function SettingsPage() {
   const {
-    t, lang, setLang, income, setIncome,
+    t, lang, setLang, currency, setCurrency, income, setIncome,
     savings, setSavings, incomeDay, setIncomeDay,
     accountStatus, trialExpiresAt, subscriptionExpiresAt,
     effectiveIncome, additionalIncomeThisMonth,
@@ -582,6 +582,22 @@ function SettingsPage() {
       </Card>
 
       <Card className="p-4 mb-4">
+        <Label className="mb-2 block">{t("currencyLabel")}</Label>
+        <div className="grid grid-cols-3 gap-2">
+          {(["MAD", "EUR", "USD"] as Currency[]).map((c) => (
+            <Button
+              key={c}
+              type="button"
+              variant={currency === c ? "default" : "outline"}
+              onClick={() => setCurrency(c)}
+            >
+              {c === "MAD" ? "🇲🇦 MAD" : c === "EUR" ? "🇪🇺 EUR" : "🇺🇸 USD"}
+            </Button>
+          ))}
+        </div>
+      </Card>
+
+      <Card className="p-4 mb-4">
         <Label htmlFor="income">{t("monthlyIncome")}</Label>
         <Input
           id="income"
@@ -646,25 +662,25 @@ function SettingsPage() {
             <div className="border-t border-border mt-4 pt-4 space-y-2">
               <div className="flex justify-between text-sm">
                 <span className="text-muted-foreground">{t("monthlyIncome")}</span>
-                <span className="font-medium">{formatMAD(income, lang)}</span>
+                <span className="font-medium">{formatMAD(income, lang, currency)}</span>
               </div>
               {additionalIncomeThisMonth > 0 && (
                 <div className="flex justify-between text-sm">
                   <span className="text-muted-foreground">{t("additionalIncome")}</span>
-                  <span className="font-medium text-emerald-600">+{formatMAD(additionalIncomeThisMonth, lang)}</span>
+                  <span className="font-medium text-emerald-600">+{formatMAD(additionalIncomeThisMonth, lang, currency)}</span>
                 </div>
               )}
               <div className="flex justify-between text-sm">
                 <span className="text-muted-foreground">{t("totalAllocated")}</span>
-                <span className="font-medium">{formatMAD(totalAllocated, lang)}</span>
+                <span className="font-medium">{formatMAD(totalAllocated, lang, currency)}</span>
               </div>
               <div className="flex justify-between text-sm">
                 <span className="text-muted-foreground">{t("monthlySavings")}</span>
-                <span className="font-medium">{formatMAD(savings, lang)}</span>
+                <span className="font-medium">{formatMAD(savings, lang, currency)}</span>
               </div>
               <div className="flex justify-between text-sm font-semibold border-t border-border pt-2">
                 <span>{t("remainingFreeBudget")}</span>
-                <span style={{ color: remainingColor }}>{formatMAD(remaining, lang)}</span>
+                <span style={{ color: remainingColor }}>{formatMAD(remaining, lang, currency)}</span>
               </div>
               {remaining < 0 && (
                 <div className="flex items-start gap-1.5 pt-1">

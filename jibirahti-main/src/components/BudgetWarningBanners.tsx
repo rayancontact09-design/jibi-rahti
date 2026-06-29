@@ -38,7 +38,7 @@ function saveDismissed(set: Set<string>) {
 }
 
 export function BudgetWarningBanners({ categories, spentByCatId }: Props) {
-  const { t, lang } = useBudget();
+  const { t, lang, currency } = useBudget();
   const [dismissed, setDismissed] = useState<Set<string>>(loadDismissed);
 
   const warnings = useMemo<Warning[]>(() => {
@@ -82,7 +82,7 @@ export function BudgetWarningBanners({ categories, spentByCatId }: Props) {
           bg = "#dc2626";
           message = t("budgetWarnOver")
             .replace("{category}", w.cat.name)
-            .replace("{amount}", formatMAD(w.over, lang));
+            .replace("{amount}", formatMAD(w.over, lang, currency));
         } else if (w.level === "full") {
           bg = "#f97316";
           message = t("budgetWarnFull").replace("{category}", w.cat.name);
