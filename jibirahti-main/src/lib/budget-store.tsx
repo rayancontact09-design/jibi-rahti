@@ -168,6 +168,18 @@ async function loadUserData(userId: string, userEmail?: string | null): Promise<
     }
   }
 
+  // ── DIAGNOSTIC LOGS ── remove after debugging ──────────────────────────
+  console.log("[jibi-debug] LOAD — profile row:", JSON.stringify(profile));
+  console.log(
+    "[jibi-debug] LOAD — lang →", profile?.lang ?? getLang(),
+    "| source:", profile?.lang ? `Supabase(${profile.lang})` : `localStorage(${getLang()})`,
+  );
+  console.log(
+    "[jibi-debug] LOAD — currency →", profile?.currency ?? "MAD",
+    "| source:", profile?.currency ? `Supabase(${profile.currency})` : "DEFAULT(MAD)",
+  );
+  // ────────────────────────────────────────────────────────────────────────
+
   return {
     lang: (profile?.lang ?? getLang()) as Lang,
     currency: ((profile?.currency ?? "MAD") as Currency),
@@ -300,8 +312,34 @@ export function BudgetProvider({ children }: { children: ReactNode }) {
       last_reset_month: state.lastResetMonth ?? null,
     };
     const timer = setTimeout(async () => {
+      // ── DIAGNOSTIC LOGS ── remove after debugging ────────────────────────
+      console.log("[jibi-debug] SAVE — payload:", JSON.stringify(snap));
+      // ─────────────────────────────────────────────────────────────────────
       const { error } = await supabase.from("profiles").upsert(snap);
-      if (error) console.error("[jibi] profiles upsert:", error.message, error);
+      if (error) {
+        console.error("[jibi] profiles upsert:", error.message, error);
+        // ── DIAGNOSTIC LOGS ──────────────────────────────────────────────
+        console.error("[jibi-debug] SAVE — ERROR code:", error.code, "| message:", error.message);
+        // ─────────────────────────────────────────────────────────────────
+      } else {
+        // ── DIAGNOSTIC LOGS ──────────────────────────────────────────────
+        console.log("[jibi-debug] SAVE — OK. Reading back row from Supabase…");
+        const { data: verify, error: verifyErr } = await supabase
+          .from("profiles")
+          .select("*")
+          .eq("id", snap.id)
+          .maybeSingle();
+        if (verifyErr) {
+          console.error("[jibi-debug] SAVE — read-back error:", verifyErr.message);
+        } else {
+          console.log(
+            "[jibi-debug] SAVE — row in DB after save: lang =", verify?.lang,
+            "| currency =", verify?.currency,
+            "| full row:", JSON.stringify(verify),
+          );
+        }
+        // ─────────────────────────────────────────────────────────────────
+      }
     }, 800);
     return () => clearTimeout(timer);
   }, [userId, state.lang, state.currency, state.income, state.savings, state.incomeDay, state.lastResetMonth]);
