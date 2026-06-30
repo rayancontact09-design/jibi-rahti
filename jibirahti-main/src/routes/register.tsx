@@ -11,6 +11,7 @@ import { Button } from "@/components/ui/button";
 import { Eye, EyeOff, Wallet } from "lucide-react";
 import { toast } from "sonner";
 import { trackSignup } from "@/lib/analytics";
+import { pixelCompleteRegistration, pixelStartTrial } from "@/lib/meta-pixel";
 
 export const Route = createFileRoute("/register")({
   component: RegisterPage,
@@ -72,8 +73,11 @@ function RegisterPage() {
         );
       }
       trackSignup();
+      pixelCompleteRegistration();
+      pixelStartTrial();
       toast.success(t("accountCreated"));
-      navigate({ to: "/dashboard" });
+      sessionStorage.setItem("jibi_setup_needed", "1");
+      navigate({ to: "/setup" });
     }
     setLoading(false);
   };

@@ -395,6 +395,14 @@ export const translations: Record<Lang, Record<string, string>> = {
     noResults: "Aucun résultat",
     loadErrorTitle: "Erreur de chargement",
     loadErrorHint: "Vérifiez que la migration SQL a été exécutée dans Supabase.",
+
+    // ── Setup screen ──────────────────────────────────────────────────────────
+    setupTitle: "Bienvenue sur JIBI RAHTI",
+    setupDesc: "Prenons quelques secondes pour personnaliser votre application avant de commencer.",
+    setupLangSection: "Langue",
+    setupCurrencySection: "Devise",
+    setupContinueBtn: "Continuer",
+    setupContinueLoading: "Configuration…",
   },
 
   ar: {
@@ -697,6 +705,14 @@ export const translations: Record<Lang, Record<string, string>> = {
     noResults: "لا نتائج",
     loadErrorTitle: "خطأ في التحميل",
     loadErrorHint: "تحقق من تنفيذ ترحيل SQL في Supabase.",
+
+    // ── Setup screen ──────────────────────────────────────────────────────────
+    setupTitle: "أهلاً بك في جيبي راحتي",
+    setupDesc: "دعنا نأخذ بضع ثوانٍ لتخصيص تطبيقك قبل البدء.",
+    setupLangSection: "اللغة",
+    setupCurrencySection: "العملة",
+    setupContinueBtn: "متابعة",
+    setupContinueLoading: "جارٍ الإعداد…",
   },
 
   en: {
@@ -999,6 +1015,14 @@ export const translations: Record<Lang, Record<string, string>> = {
     noResults: "No results",
     loadErrorTitle: "Loading error",
     loadErrorHint: "Check that the SQL migration has been run in Supabase.",
+
+    // ── Setup screen ──────────────────────────────────────────────────────────
+    setupTitle: "Welcome to JIBI RAHTI",
+    setupDesc: "Let's take a few seconds to personalize your app before getting started.",
+    setupLangSection: "Language",
+    setupCurrencySection: "Currency",
+    setupContinueBtn: "Continue",
+    setupContinueLoading: "Setting up…",
   },
 };
 

@@ -8,6 +8,7 @@ import {
   Receipt, ChevronDown, ChevronUp, MessageCircle, Check, Shield, User,
 } from "lucide-react";
 import { trackAppInstallClicked } from "@/lib/analytics";
+import { pixelViewContent } from "@/lib/meta-pixel";
 import { WHATSAPP_ACTIVATION_URL } from "@/lib/whatsapp";
 
 export const Route = createFileRoute("/")({
@@ -268,6 +269,10 @@ function LandingPage() {
   const dir = isAr ? "rtl" : "ltr";
   const font = isAr ? "'Cairo', sans-serif" : "'Poppins', sans-serif";
   const C = T[lang];
+
+  useEffect(() => {
+    pixelViewContent();
+  }, []);
 
   useEffect(() => {
     if (!loading && user) navigate({ to: "/dashboard" });

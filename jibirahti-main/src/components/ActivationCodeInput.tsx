@@ -3,6 +3,7 @@ import { supabase } from "@/lib/supabase";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useBudget } from "@/lib/budget-store";
+import { pixelPurchase } from "@/lib/meta-pixel";
 
 export function ActivationCodeInput() {
   const { t, lang, refreshProfile } = useBudget();
@@ -34,6 +35,7 @@ export function ActivationCodeInput() {
         { day: "numeric", month: "long", year: "numeric" }
       );
       setResult({ success: true, message: t("codeSuccess").replace("{date}", expDate) });
+      pixelPurchase();
       setTimeout(() => refreshProfile(), 1500);
     }
 

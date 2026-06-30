@@ -11,6 +11,7 @@ import { Button } from "@/components/ui/button";
 import { Eye, EyeOff, Wallet } from "lucide-react";
 import { toast } from "sonner";
 import { trackLogin } from "@/lib/analytics";
+import { pixelLogin } from "@/lib/meta-pixel";
 
 export const Route = createFileRoute("/login")({
   component: LoginPage,
@@ -47,6 +48,7 @@ function LoginPage() {
       toast.error(te(error.message));
     } else {
       trackLogin();
+      pixelLogin();
       navigate({ to: "/dashboard" });
     }
     setLoading(false);
