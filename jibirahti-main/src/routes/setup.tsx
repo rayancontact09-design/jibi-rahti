@@ -4,7 +4,7 @@ import { supabase } from "@/lib/supabase";
 import { useAuth } from "@/lib/auth";
 import { useBudget, type Currency, type Lang } from "@/lib/budget-store";
 import { Button } from "@/components/ui/button";
-import { Wallet, CheckCircle2 } from "lucide-react";
+import { CheckCircle2 } from "lucide-react";
 import { tr, applyLangToDOM } from "@/i18n/translations";
 
 export const Route = createFileRoute("/setup")({
@@ -81,43 +81,50 @@ function SetupPage() {
     >
       {/* ── Hero gradient header ────────────────────────────────────────── */}
       <div
-        className="relative flex flex-col items-center px-6 pt-14 pb-20 overflow-hidden"
-        style={{ background: "linear-gradient(160deg, #0A7A6E 0%, #0F8B7E 40%, #1FAF8B 75%, #4CD4B0 100%)" }}
+        className="relative flex flex-col items-center justify-center px-6 py-16 overflow-hidden animate-in fade-in duration-700"
+        style={{
+          background: "linear-gradient(160deg, #0A7A6E 0%, #0F8B7E 40%, #1FAF8B 75%, #4CD4B0 100%)",
+          minHeight: "440px",
+        }}
       >
-        {/* Decorative blobs */}
+        {/* Soft blurred lights — depth, no distracting decoration */}
         <div
           aria-hidden
-          className="pointer-events-none absolute -top-16 -right-16 h-56 w-56 rounded-full opacity-20"
+          className="pointer-events-none absolute -top-24 -right-20 h-80 w-80 rounded-full opacity-30 blur-3xl animate-float-slow"
           style={{ background: "radial-gradient(circle, #fff 0%, transparent 70%)" }}
         />
         <div
           aria-hidden
-          className="pointer-events-none absolute -bottom-12 -left-12 h-44 w-44 rounded-full opacity-15"
-          style={{ background: "radial-gradient(circle, #fff 0%, transparent 70%)" }}
+          className="pointer-events-none absolute -bottom-20 -left-16 h-72 w-72 rounded-full opacity-20 blur-3xl animate-float-slow"
+          style={{ background: "radial-gradient(circle, #4CD4B0 0%, transparent 70%)", animationDelay: "2.5s" }}
         />
         <div
           aria-hidden
-          className="pointer-events-none absolute bottom-8 right-8 h-24 w-24 rounded-full opacity-10"
+          className="pointer-events-none absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-96 w-96 rounded-full opacity-[0.08] blur-3xl"
           style={{ background: "radial-gradient(circle, #fff 0%, transparent 70%)" }}
         />
 
         {/* Logo + title */}
         <div className="relative flex flex-col items-center text-center">
           <div
-            className="h-20 w-20 rounded-3xl flex items-center justify-center shadow-2xl mb-6 ring-4 ring-white/20"
-            style={{ background: "rgba(255,255,255,0.18)", backdropFilter: "blur(12px)" }}
+            className="h-24 w-24 rounded-4xl flex items-center justify-center shadow-elegant mb-8 ring-1 ring-white/25 animate-float-slow"
+            style={{
+              background: "rgba(255,255,255,0.15)",
+              backdropFilter: "blur(20px) saturate(160%)",
+              WebkitBackdropFilter: "blur(20px) saturate(160%)",
+            }}
           >
-            <Wallet className="h-10 w-10 text-white" strokeWidth={1.6} />
+            <img src="/icon-192.png" alt="JIBI RAHTI" className="h-14 w-14 rounded-2xl object-contain" />
           </div>
 
           <h1
-            className="text-[22px] font-extrabold text-white drop-shadow leading-tight"
-            style={{ fontFamily: font }}
+            className="text-3xl font-extrabold text-white leading-tight tracking-tight"
+            style={{ fontFamily: font, textShadow: "0 2px 16px rgba(0,0,0,0.18)" }}
           >
             {tr(uiLang, "setupTitle")}
           </h1>
           <p
-            className="text-white/85 text-sm mt-3 max-w-xs leading-relaxed"
+            className="text-white/80 text-[15px] mt-3.5 max-w-[520px] leading-relaxed"
             style={{ fontFamily: font }}
           >
             {tr(uiLang, "setupDesc")}
