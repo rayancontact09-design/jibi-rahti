@@ -11,10 +11,10 @@ export function BottomNav() {
   const { t } = useBudget();
   const { pathname } = useLocation();
   const items = [
-    { to: "/dashboard", icon: Home, label: t("dashboard"), center: false },
-    { to: "/add", icon: PlusCircle, label: t("addExpense"), center: true },
-    { to: "/report", icon: FileBarChart2, label: t("reports"), center: false },
-    { to: "/settings", icon: Settings, label: t("settings"), center: false },
+    { to: "/dashboard", icon: Home, label: t("dashboard"), center: false, tutorialId: undefined },
+    { to: "/add", icon: PlusCircle, label: t("addExpense"), center: true, tutorialId: "add-expense-btn" },
+    { to: "/report", icon: FileBarChart2, label: t("reports"), center: false, tutorialId: undefined },
+    { to: "/settings", icon: Settings, label: t("settings"), center: false, tutorialId: "settings-nav-btn" },
   ] as const;
 
   return (
@@ -24,12 +24,13 @@ export function BottomNav() {
     >
       <div className="max-w-md mx-auto pointer-events-auto rounded-[28px] glass shadow-elegant px-2 py-2">
         <ul className="grid grid-cols-4">
-          {items.map(({ to, icon: Icon, label, center }) => {
+          {items.map(({ to, icon: Icon, label, center, tutorialId }) => {
             const active = pathname === to;
             return (
               <li key={to} className="flex min-w-0">
                 <Link
                   to={to}
+                  data-tutorial-id={tutorialId}
                   className={`flex-1 flex flex-col items-center justify-center gap-1 py-2.5 rounded-2xl text-[10px] font-medium transition-all duration-300 active:scale-95 min-w-0 ${
                     !center && active
                       ? "text-primary bg-primary/10"

@@ -20,7 +20,7 @@ export function ExpiredScreen() {
         <div>
           <h1 className="text-2xl font-bold text-foreground mb-2">{t("trialExpiredTitle")}</h1>
           <p className="text-muted-foreground text-sm leading-relaxed">{t("trialExpiredMsg")}</p>
-          <p className="text-primary text-sm font-bold mt-2">{t("priceMonthlyLine")}</p>
+          <p className="text-primary text-sm font-bold mt-2">{t("priceLine")}</p>
         </div>
         <div className="bg-card border rounded-xl p-4 text-left space-y-3">
           <div className="flex items-center gap-2 text-sm font-semibold">

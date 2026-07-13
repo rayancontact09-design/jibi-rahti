@@ -1,6 +1,12 @@
 import { Outlet, Link, createRootRoute } from "@tanstack/react-router";
 import { AuthProvider } from "@/lib/auth";
 import { BudgetProvider } from "@/lib/budget-store";
+import { TutorialProvider } from "@/lib/tutorial";
+// The interactive onboarding guide is disabled for now (see settings.tsx's
+// "Guide de démarrage" entry and RootComponent below) — the engine itself
+// (TutorialProvider, reportAction() call sites) stays wired so it can be
+// re-enabled later, but its step definitions and visual overlay are not
+// loaded/mounted, so it can never auto-start or render anything.
 import { Toaster } from "@/components/ui/sonner";
 import { useLang } from "@/i18n/use-lang";
 import { InstallPrompt } from "@/components/InstallPrompt";
@@ -35,9 +41,11 @@ function RootComponent() {
   return (
     <AuthProvider>
       <BudgetProvider>
-        <Outlet />
-        <Toaster />
-        <InstallPrompt />
+        <TutorialProvider>
+          <Outlet />
+          <Toaster />
+          <InstallPrompt />
+        </TutorialProvider>
       </BudgetProvider>
     </AuthProvider>
   );

@@ -16,10 +16,15 @@ import {
   AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent,
   AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import { AlertTriangle, CalendarDays, CheckCircle2, Crown, Key, LogOut, Mail, Pencil, Plus, Shield, Trash2, TrendingUp, User } from "lucide-react";
+import { AlertTriangle, CalendarDays, CheckCircle2, Crown, HelpCircle, Key, LogOut, Mail, Pencil, Plus, Shield, Trash2, TrendingUp, User } from "lucide-react";
+import { useTutorial, ONBOARDING_TUTORIAL_ID } from "@/lib/tutorial";
 import { computeAccountStatus, formatTimeRemaining } from "@/i18n/format-time";
 import { toast } from "sonner";
 import { WHATSAPP_ACTIVATION_URL } from "@/lib/whatsapp";
+
+// The interactive onboarding guide is temporarily disabled — flip this back
+// to `true` to restore the "Guide de démarrage" entry in Settings.
+const ONBOARDING_GUIDE_ENABLED = false;
 
 type Category = {
   id: string;
@@ -49,6 +54,7 @@ function CategorySection({
   const [deleteTarget, setDeleteTarget] = useState<Category | null>(null);
   const [deleting, setDeleting] = useState(false);
   const [budgetEdits, setBudgetEdits] = useState<Record<string, string>>({});
+  const { reportAction } = useTutorial();
 
   const fetchCategories = async () => {
     const { data, error } = await supabase
@@ -92,6 +98,8 @@ function CategorySection({
     setFormBudget("0");
     setFormError(null);
     setModal({ open: true, mode: "add" });
+    // Real click, opens the dialog immediately — no network round-trip needed.
+    reportAction("add-category-opened");
   };
 
   const openEdit = (cat: Category) => {
@@ -123,12 +131,16 @@ function CategorySection({
         .update({ name, budget })
         .eq("id", modal.item.id);
       if (error) { toast.error(error.message); }
-      else { closeModal(); await fetchCategories(); }
+      // Report the tutorial action — and let the engine advance past this
+      // step — while the dialog (and its "Enregistrer" button) is still
+      // mounted and open. Only close the dialog afterwards, so the target
+      // element never disappears before the step has actually completed.
+      else { reportAction("budget-saved"); await fetchCategories(); closeModal(); }
     } else {
       const { error } = await supabase.from("categories")
         .insert({ user_id: userId, name, budget });
       if (error) { toast.error(error.message); }
-      else { closeModal(); await fetchCategories(); }
+      else { reportAction("budget-saved"); await fetchCategories(); closeModal(); }
     }
 
     setSaving(false);
@@ -186,6 +198,7 @@ function CategorySection({
         variant="outline"
         size="sm"
         className="w-full gap-2 text-xs h-8 border-dashed"
+        data-tutorial-id="settings-add-category-btn"
         onClick={openAdd}
       >
         <Plus className="h-3.5 w-3.5" />
@@ -194,7 +207,7 @@ function CategorySection({
 
       {/* Add / Edit dialog */}
       <Dialog open={modal.open} onOpenChange={(open) => !open && closeModal()}>
-        <DialogContent className="max-w-sm">
+        <DialogContent className="max-w-sm" data-tutorial-id="settings-category-dialog">
           <DialogHeader>
             <DialogTitle>
               {modal.open && modal.mode === "edit" ? t("editCategory") : t("addCategory")}
@@ -232,7 +245,12 @@ function CategorySection({
           </div>
           <DialogFooter>
             <Button type="button" variant="outline" onClick={closeModal}>{t("cancel")}</Button>
-            <Button type="button" disabled={saving || !formName.trim()} onClick={save}>
+            <Button
+              type="button"
+              disabled={saving || !formName.trim()}
+              data-tutorial-id="settings-category-save-btn"
+              onClick={save}
+            >
               {saving ? "…" : t("save")}
             </Button>
           </DialogFooter>
@@ -414,7 +432,37 @@ function SettingsPage() {
     effectiveIncome, additionalIncomeThisMonth,
   } = useBudget();
   const { signOut, user } = useAuth();
+  const { restart: restartTutorial, reportAction, currentStep } = useTutorial();
   const [totalAllocated, setTotalAllocated] = useState(0);
+  const [savingIncome, setSavingIncome] = useState(false);
+
+  // Explicit "Enregistrer" action for the monthly income field. Also drives
+  // the "Income configured" tutorial step: reportAction only fires once this
+  // real, user-clicked save actually succeeds on Supabase (no timeout, no
+  // onBlur guesswork) — and only while that exact step is active, so normal
+  // (non-tutorial) use of this button is otherwise unaffected.
+  const handleSaveIncome = async () => {
+    if (!user?.id || income <= 0 || savingIncome) return;
+    setSavingIncome(true);
+    const { error } = await supabase
+      .from("profiles")
+      .upsert({ id: user.id, income }, { onConflict: "id" });
+    setSavingIncome(false);
+    if (error) {
+      console.error("[jibi] income save:", error.message);
+      return;
+    }
+    if (currentStep?.targetId === "settings-income-save-btn") {
+      reportAction("income-saved");
+    }
+  };
+
+  // The user only reaches this screen by actually clicking the Settings nav
+  // button — a real navigation confirms the "open Settings" tutorial step.
+  useEffect(() => {
+    reportAction("settings-opened");
+  }, [reportAction]);
+
   const days = Array.from({ length: 31 }, (_, i) => i + 1);
 
   const isAdmin = user?.email === "rayan.contact09@gmail.com";
@@ -534,7 +582,7 @@ function SettingsPage() {
           <h2 className="font-semibold mb-1">💬 {t("whatsappContactTitle")}</h2>
           <p className="text-xs text-muted-foreground mb-3">{t("whatsappContactDesc")}</p>
           <div className="flex flex-col gap-0.5 mb-3 text-xs font-semibold text-primary">
-            <span>{t("priceMonthlyLine")}</span>
+            <span>{t("priceLine")}</span>
             <span>{t("trialDurationLine")}</span>
             <span>{t("activateWhatsapp")}</span>
           </div>
@@ -601,11 +649,22 @@ function SettingsPage() {
         <Label htmlFor="income">{t("monthlyIncome")}</Label>
         <Input
           id="income"
+          data-tutorial-id="settings-income-input"
           type="number"
           min="0"
           value={income || ""}
           onChange={(e) => setIncome(parseFloat(e.target.value) || 0)}
         />
+        <Button
+          type="button"
+          size="sm"
+          className="w-full mt-2"
+          data-tutorial-id="settings-income-save-btn"
+          disabled={savingIncome || income <= 0}
+          onClick={handleSaveIncome}
+        >
+          {savingIncome ? "…" : t("save")}
+        </Button>
         <div className="mt-4">
           <Popover>
             <PopoverTrigger asChild>
@@ -643,7 +702,7 @@ function SettingsPage() {
         <AdditionalIncomeSection />
       </Card>
 
-      <Card className="p-4 mb-4">
+      <Card className="p-4 mb-4" data-tutorial-id="settings-budget-zone">
         <h2 className="font-semibold mb-3">{t("budgetPerCategory")}</h2>
         {user && (
           <CategorySection
@@ -703,6 +762,24 @@ function SettingsPage() {
           />
         </div>
       </Card>
+
+      {ONBOARDING_GUIDE_ENABLED && (
+        <Card className="p-4 mb-4">
+          <h2 className="font-semibold mb-3 flex items-center gap-2">
+            <HelpCircle className="h-4 w-4 text-primary" />
+            {t("tutorialRestartTitle")}
+          </h2>
+          <p className="text-sm text-muted-foreground mb-3">{t("tutorialRestartDesc")}</p>
+          <Button
+            variant="outline"
+            className="w-full gap-2"
+            onClick={() => restartTutorial(ONBOARDING_TUTORIAL_ID)}
+          >
+            <HelpCircle className="h-4 w-4" />
+            {t("tutorialRestartButton")}
+          </Button>
+        </Card>
+      )}
 
       <Card className="p-4">
         <Button

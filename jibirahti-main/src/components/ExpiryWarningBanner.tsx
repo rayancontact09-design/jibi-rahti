@@ -17,7 +17,7 @@ function minutesUntil(iso: string): number {
   return Math.ceil((new Date(iso).getTime() - Date.now()) / 60_000);
 }
 
-// Subscription warning threshold (days-based — monthly/yearly plans only).
+// Subscription warning threshold (days-based — annual plan only).
 function warningThreshold(days: number): 7 | 3 | 1 | null {
   if (days <= 1) return 1;
   if (days <= 3) return 3;
@@ -43,7 +43,7 @@ export function ExpiryWarningBanner() {
 
   // Trials are now only 2 hours long — day-based thresholds don't apply here.
   // Warn by minutes instead, only in the final 30 minutes of the trial.
-  // Subscriptions (monthly/yearly) keep the original day-based 7/3/1 cadence.
+  // Subscriptions (annual plan) keep the original day-based 7/3/1 cadence.
   const minutesLeft = isTrial && expiresAt ? minutesUntil(expiresAt) : null;
   const trialWarning = minutesLeft !== null && minutesLeft > 0 && minutesLeft <= 30;
 

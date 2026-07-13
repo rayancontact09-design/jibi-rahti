@@ -6,7 +6,7 @@ import { supabase } from "@/lib/supabase";
 import { AppShell } from "@/components/BottomNav";
 import { Card } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
-import { AlertTriangle, Trash2, Pencil, Wallet, AlertCircle, Bell, CheckCircle2, TrendingUp, TrendingDown, Sparkles, Sun, Moon, Eye, ArrowUpRight } from "lucide-react";
+import { AlertTriangle, Trash2, Pencil, Wallet, AlertCircle, Bell, CheckCircle2, TrendingUp, TrendingDown, Sun, Moon, Eye, ArrowUpRight } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -20,6 +20,7 @@ import { SavingsGoalModal } from "@/components/SavingsGoalModal";
 import { ExpiryWarningBanner } from "@/components/ExpiryWarningBanner";
 import { BudgetWarningBanners } from "@/components/BudgetWarningBanners";
 import { useTheme } from "@/hooks/use-theme";
+import { generateCoachAdvice, formatCoachText, type CoachCategory, type CoachPriority } from "@/lib/coach";
 
 type DynCategory = { id: string; name: string; budget: number };
 
@@ -27,17 +28,36 @@ export const Route = createFileRoute("/dashboard")({
   component: DashboardPage,
 });
 
+const COACH_STYLES: Record<CoachPriority, { iconBg: string; cardBg: string; titleColor: string }> = {
+  critical: {
+    iconBg: "linear-gradient(135deg,#E53935,#FF6B6B)",
+    cardBg: "linear-gradient(135deg,#FFF5F5,#FFE5E5)",
+    titleColor: "#7F1D1D",
+  },
+  warning: {
+    iconBg: "linear-gradient(135deg,#F59E0B,#FBBF24)",
+    cardBg: "linear-gradient(135deg,#FFFBEB,#FEF3C7)",
+    titleColor: "#8A5A00",
+  },
+  positive: {
+    iconBg: "linear-gradient(135deg,#1FAF8B,#4CD4B0)",
+    cardBg: "linear-gradient(135deg,#F4FBF8,#E8F5F0)",
+    titleColor: "#0F766E",
+  },
+};
+
 function DashboardPage() {
   const {
     t,
     lang,
     currency,
     income,
+    effectiveIncome,
     totalExpenses,
     balance,
     expenses,
     removeExpense,
-    savings,
+    savingsGoal,
     effectiveSavings,
     savingsUsed,
     savingsDepleted,
@@ -103,6 +123,38 @@ function DashboardPage() {
     return m;
   }, [dynCategories]);
 
+  const prevMonthExpenses = useMemo(() => {
+    const now = new Date();
+    const prev = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+    const prevYm = `${prev.getFullYear()}-${String(prev.getMonth() + 1).padStart(2, "0")}`;
+    return expenses.filter((e) => e.date.startsWith(prevYm)).reduce((s, e) => s + e.amount, 0);
+  }, [expenses]);
+
+  // Financial coach: up to 3 personalized tips derived entirely from data
+  // already in the app (no external AI call) — see src/lib/coach/rules.ts.
+  const coachAdvice = useMemo(() => {
+    const categories: CoachCategory[] = dynCategories.map((cat) => ({
+      id: cat.id,
+      name: cat.name,
+      budget: cat.budget,
+      spent: spentByCatId[cat.id] ?? 0,
+    }));
+    return generateCoachAdvice({
+      categories,
+      effectiveIncome,
+      balance,
+      totalExpenses,
+      prevMonthExpenses,
+      effectiveSavings,
+      savingsUsed,
+      savingsDepleted,
+      hasSavingsGoal: Boolean(savingsGoal),
+    });
+  }, [
+    dynCategories, spentByCatId, effectiveIncome, balance, totalExpenses,
+    prevMonthExpenses, effectiveSavings, savingsUsed, savingsDepleted, savingsGoal,
+  ]);
+
   type AlertLevel = 1 | 2 | 3;
   type CategoryAlert = { id: string; name: string; level: AlertLevel; pct: number };
   const categoryAlerts: CategoryAlert[] = dynCategories.map((cat) => {
@@ -119,6 +171,17 @@ function DashboardPage() {
   })
     .filter((x): x is CategoryAlert => x !== null)
     .sort((a, b) => b.level - a.level);
+
+  // "Économie du jour" — budget restant du mois ÷ jours restants avant la fin
+  // du mois. Recalculé automatiquement à chaque changement de `balance`
+  // (donc après chaque dépense, puisque `balance` en dépend dans budget-store).
+  const dailySavingTarget = useMemo(() => {
+    if (balance <= 0) return 0;
+    const now = new Date();
+    const daysInMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
+    const daysRemaining = Math.max(1, daysInMonth - now.getDate() + 1);
+    return balance / daysRemaining;
+  }, [balance]);
 
   const balanceGradient =
     balanceStatus === "positive"
@@ -320,49 +383,80 @@ function DashboardPage() {
               </div>
             </Card>
 
-            {income > 0 && (
-              <Card className={`relative overflow-hidden mb-4 rounded-3xl border-0 p-4 shadow-card glass animate-fade-in ${lang === "ar" ? "text-right" : "text-left"}`}>
-                <div
-                  aria-hidden
-                  className="absolute -top-10 -right-10 h-32 w-32 rounded-full opacity-30 blur-2xl"
-                  style={{ background: "radial-gradient(circle, #4CD4B0 0%, transparent 70%)" }}
-                />
-                <div className={`relative flex items-start gap-3 ${lang === "ar" ? "flex-row-reverse" : ""}`}>
-                  <div className="h-11 w-11 shrink-0 rounded-2xl gradient-primary flex items-center justify-center shadow-elegant">
-                    <Sparkles className="h-5 w-5 text-white" />
-                  </div>
-                  <div className="flex-1">
-                    <div className={`flex items-center gap-2 ${lang === "ar" ? "flex-row-reverse" : ""}`}>
-                      <p className="text-sm font-bold" style={{ fontFamily: arFont }}>
-                        {t("aiAssistantTitle")}
-                      </p>
-                      <span className="text-[9px] uppercase tracking-widest font-bold px-1.5 py-0.5 rounded-full bg-primary/15 text-primary">AI</span>
-                    </div>
-                    <p className="text-xs text-muted-foreground mt-1.5 leading-relaxed" style={{ fontFamily: arFont }}>
-                      {(() => {
-                        const savingsPct = income > 0 ? (savings / income) * 100 : 0;
-                        const expensePct = income > 0 ? (totalExpenses / income) * 100 : 0;
-                        if (balanceStatus === "negative") {
-                          return t("aiInsightOverBudget");
-                        }
-                        if (savingsPct >= 20) {
-                          return t("aiInsightGoodSavings");
-                        }
-                        if (expensePct > 70) {
-                          return t("aiInsightHighExpense");
-                        }
-                        return t("aiInsightBalanced");
-                      })()}
-                    </p>
-                    <Link
-                      to="/report"
-                      className={`mt-3 inline-flex items-center gap-1 text-xs font-semibold text-primary group ${lang === "ar" ? "flex-row-reverse" : ""}`}
+            {income > 0 && coachAdvice.length > 0 && (
+              <div className="mb-4">
+                {coachAdvice.map((advice) => {
+                  const styles = COACH_STYLES[advice.priority];
+                  const Icon = advice.icon;
+                  return (
+                    <Card
+                      key={advice.id}
+                      className={`relative overflow-hidden mb-3 rounded-3xl border-0 p-4 shadow-card glass animate-fade-in ${lang === "ar" ? "text-right" : "text-left"}`}
+                      style={{ background: styles.cardBg }}
                     >
-                      <span style={{ fontFamily: arFont }}>{t("fullAnalysisLink")}</span>
-                      <ArrowUpRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-                    </Link>
-                  </div>
-                </div>
+                      <div
+                        aria-hidden
+                        className="absolute -top-10 -right-10 h-32 w-32 rounded-full opacity-30 blur-2xl"
+                        style={{ background: "radial-gradient(circle, #4CD4B0 0%, transparent 70%)" }}
+                      />
+                      <div className={`relative flex items-start gap-3 ${lang === "ar" ? "flex-row-reverse" : ""}`}>
+                        <div
+                          className="h-11 w-11 shrink-0 rounded-2xl flex items-center justify-center shadow-elegant"
+                          style={{ background: styles.iconBg }}
+                        >
+                          <Icon className="h-5 w-5 text-white" />
+                        </div>
+                        <div className="flex-1">
+                          <div className={`flex items-center gap-2 ${lang === "ar" ? "flex-row-reverse" : ""}`}>
+                            <p className="text-sm font-bold" style={{ fontFamily: arFont, color: styles.titleColor }}>
+                              {t(advice.titleKey)}
+                            </p>
+                            <span className="text-[9px] uppercase tracking-widest font-bold px-1.5 py-0.5 rounded-full bg-primary/15 text-primary">AI</span>
+                          </div>
+                          <p className="text-xs text-muted-foreground mt-1.5 leading-relaxed" style={{ fontFamily: arFont }}>
+                            {formatCoachText(t(advice.descriptionKey), advice.params)}
+                          </p>
+                          <p className="text-xs font-semibold mt-2" style={{ fontFamily: arFont, color: styles.titleColor }}>
+                            💡 {formatCoachText(t(advice.actionKey), advice.params)}
+                          </p>
+                        </div>
+                      </div>
+                    </Card>
+                  );
+                })}
+                <Link
+                  to="/report"
+                  className={`inline-flex items-center gap-1 text-xs font-semibold text-primary group ${lang === "ar" ? "flex-row-reverse" : ""}`}
+                >
+                  <span style={{ fontFamily: arFont }}>{t("fullAnalysisLink")}</span>
+                  <ArrowUpRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                </Link>
+              </div>
+            )}
+
+            {income > 0 && (
+              <Card
+                className={`relative overflow-hidden mb-4 rounded-3xl border-0 p-4 shadow-card animate-fade-in ${lang === "ar" ? "text-right" : "text-left"}`}
+                style={{
+                  background: balance > 0
+                    ? "linear-gradient(135deg,#FFFBEB,#FEF3C7)"
+                    : "linear-gradient(135deg,#FFF5F5,#FFE5E5)",
+                }}
+              >
+                <p
+                  className="text-sm font-bold"
+                  style={{ fontFamily: arFont, color: balance > 0 ? "#92400E" : "#7F1D1D" }}
+                >
+                  💡 {t("dailySavingTitle")}
+                </p>
+                <p
+                  className="text-xs mt-1.5 leading-relaxed"
+                  style={{ fontFamily: arFont, color: balance > 0 ? "#78350F" : "#7F1D1D" }}
+                >
+                  {balance > 0
+                    ? t("dailySavingMessage").replace("{amount}", formatMAD(dailySavingTarget, lang, currency))
+                    : t("dailySavingOverBudget")}
+                </p>
               </Card>
             )}
           </>

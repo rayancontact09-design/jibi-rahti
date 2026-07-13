@@ -18,6 +18,7 @@ export const Route = createFileRoute("/report")({
 
 const CAT_PALETTE = ["#1FAF8B", "#34D399", "#0F766E", "#A7F3D0", "#F59E0B", "#60A5FA", "#C084FC", "#FB923C"];
 const catColor = (i: number) => CAT_PALETTE[i % CAT_PALETTE.length];
+const ALERT_COLOR = "#E53935";
 
 type DynCategory = { id: string; name: string; budget: number };
 
@@ -102,6 +103,55 @@ function ReportPage() {
   });
   const topCat = [...catData].sort((a, b) => b.value - a.value)[0];
 
+  // ── "Consommation du budget" — pourcentage = dépenses / budget × 100 ──────
+  const totalBudget = useMemo(
+    () => dynCategories.reduce((sum, c) => sum + c.budget, 0),
+    [dynCategories]
+  );
+
+  const budgetConsumptionData = useMemo(() => {
+    return dynCategories.map((cat, i) => {
+      const spent = spentByCatId[cat.id] ?? 0;
+      const pct = cat.budget > 0 ? (spent / cat.budget) * 100 : 0; // true value, can exceed 100
+      return {
+        id: cat.id,
+        name: cat.name,
+        color: catColor(i),
+        spent,
+        budget: cat.budget,
+        pct,
+        barPct: Math.min(100, pct),
+        isOverBudget: pct > 100,
+      };
+    });
+  }, [dynCategories, spentByCatId]);
+
+  const overallBudgetConsumptionPct = useMemo(() => {
+    if (totalBudget <= 0) return 0;
+    const totalSpentCategorized = budgetConsumptionData.reduce((s, d) => s + d.spent, 0);
+    return (totalSpentCategorized / totalBudget) * 100;
+  }, [budgetConsumptionData, totalBudget]);
+
+  // ── "Impact sur votre revenu" — pourcentage = dépenses / revenu mensuel × 100 ──
+  const incomeImpactData = useMemo(() => {
+    if (effectiveIncome <= 0) return [];
+    return dynCategories.map((cat, i) => {
+      const spent = spentByCatId[cat.id] ?? 0;
+      return {
+        id: cat.id,
+        name: cat.name,
+        color: catColor(i),
+        spent,
+        pct: (spent / effectiveIncome) * 100,
+      };
+    });
+  }, [dynCategories, spentByCatId, effectiveIncome]);
+
+  const totalIncomeImpactPct = useMemo(
+    () => incomeImpactData.reduce((sum, d) => sum + d.pct, 0),
+    [incomeImpactData]
+  );
+
   const insights: string[] = [];
   if (effectiveIncome > 0) {
     if (effectiveSavings / effectiveIncome >= 0.15) insights.push(t("insightSavingsGood"));
@@ -125,6 +175,8 @@ function ReportPage() {
   // Donut chart geometry
   const r = 56, c = 2 * Math.PI * r;
   let acc = 0;
+  let accBudgetShare = 0;
+  let accIncomeShare = 0;
 
   const handlePrint = () => window.print();
 
@@ -393,50 +445,120 @@ function ReportPage() {
           </div>
         </div>
 
-        {/* Expense analytics */}
+        {/* Consommation du budget — pourcentage = dépenses / budget × 100 */}
         <Card className="rounded-3xl border-0 p-5 shadow-sm" style={{ background: "linear-gradient(135deg,#FFFFFF,#F4FBF8)" }}>
           <h3 className={`text-sm font-bold mb-3 ${isAr ? "text-right" : ""}`} style={{ color: "#0F766E", fontFamily: arFont }}>
             {t("expenseAnalytics")}
           </h3>
-          <div className={`flex items-center gap-4 ${isAr ? "flex-row-reverse" : ""}`}>
-            <svg width="140" height="140" viewBox="0 0 140 140" className="shrink-0">
-              <circle cx="70" cy="70" r={r} fill="none" stroke="#F1F5F9" strokeWidth="18" />
-              {pureExpenses > 0 && catData.map(d => {
-                if (d.value <= 0) return null;
-                const len = (c * d.pct) / 100;
-                const off = c - acc;
-                acc += len;
-                return (
-                  <circle key={d.id} cx="70" cy="70" r={r} fill="none"
-                    stroke={d.color} strokeWidth="18"
-                    strokeDasharray={`${len} ${c - len}`}
-                    strokeDashoffset={off}
-                    transform="rotate(-90 70 70)" />
-                );
-              })}
-              <text x="70" y="68" textAnchor="middle" fontSize="11" fill="#64748B" fontFamily={arFont}>{t("totalLabel")}</text>
-              <text x="70" y="84" textAnchor="middle" fontSize="13" fontWeight="700" fill="#0F766E">
-                {Math.round(pureExpenses).toLocaleString()}
-              </text>
-            </svg>
-            <div className="flex-1 space-y-2">
-              {catData.map(d => (
-                <div key={d.id} className={`${isAr ? "text-right" : ""}`}>
-                  <div className={`flex items-center justify-between text-[11px] ${isAr ? "flex-row-reverse" : ""}`}>
-                    <span className={`flex items-center gap-1.5 font-medium ${isAr ? "flex-row-reverse" : ""}`} style={{ fontFamily: arFont, color: "#0F766E" }}>
-                      <span className="h-2.5 w-2.5 rounded-full" style={{ background: d.color }} />
-                      {d.name}
-                    </span>
-                    <span className="font-bold tabular-nums" style={{ color: "#0F766E" }}>{Math.round(d.pct)}%</span>
+          {totalBudget <= 0 ? (
+            <p className="text-xs text-muted-foreground text-center py-2" style={{ fontFamily: arFont }}>
+              {t("budgetConsumptionEmptyState")}
+            </p>
+          ) : (
+            <div className={`flex items-center gap-4 ${isAr ? "flex-row-reverse" : ""}`}>
+              <svg width="140" height="140" viewBox="0 0 140 140" className="shrink-0">
+                <circle cx="70" cy="70" r={r} fill="none" stroke="#F1F5F9" strokeWidth="18" />
+                {budgetConsumptionData.map(d => {
+                  if (d.budget <= 0) return null;
+                  const share = (d.budget / totalBudget) * 100;
+                  const len = (c * share) / 100;
+                  const off = c - accBudgetShare;
+                  accBudgetShare += len;
+                  return (
+                    <circle key={d.id} cx="70" cy="70" r={r} fill="none"
+                      stroke={d.isOverBudget ? ALERT_COLOR : d.color} strokeWidth="18"
+                      strokeDasharray={`${len} ${c - len}`}
+                      strokeDashoffset={off}
+                      transform="rotate(-90 70 70)" />
+                  );
+                })}
+                <text x="70" y="68" textAnchor="middle" fontSize="11" fill="#64748B" fontFamily={arFont}>{t("budgetConsumedLabel")}</text>
+                <text x="70" y="84" textAnchor="middle" fontSize="13" fontWeight="700"
+                  fill={overallBudgetConsumptionPct > 100 ? ALERT_COLOR : "#0F766E"}>
+                  {Math.round(overallBudgetConsumptionPct)}%
+                </text>
+              </svg>
+              <div className="flex-1 space-y-2">
+                {budgetConsumptionData.map(d => (
+                  <div key={d.id} className={`${isAr ? "text-right" : ""}`}>
+                    <div className={`flex items-center justify-between text-[11px] ${isAr ? "flex-row-reverse" : ""}`}>
+                      <span className={`flex items-center gap-1.5 font-medium ${isAr ? "flex-row-reverse" : ""}`} style={{ fontFamily: arFont, color: "#0F766E" }}>
+                        <span className="h-2.5 w-2.5 rounded-full" style={{ background: d.isOverBudget ? ALERT_COLOR : d.color }} />
+                        {d.name}
+                      </span>
+                      <span className="font-bold tabular-nums" style={{ color: d.isOverBudget ? ALERT_COLOR : "#0F766E" }}>
+                        {Math.round(d.pct)}%
+                      </span>
+                    </div>
+                    <div className={`flex justify-between text-[10px] text-muted-foreground mt-0.5 ${isAr ? "flex-row-reverse" : ""}`}>
+                      <span className="tabular-nums">
+                        {formatMAD(d.spent, lang, currency)} / {formatMAD(d.budget, lang, currency)}
+                      </span>
+                    </div>
+                    <div className="h-1.5 rounded-full bg-gray-100 overflow-hidden mt-1">
+                      <div className="h-full rounded-full transition-all"
+                        style={{ width: `${d.barPct}%`, background: d.isOverBudget ? ALERT_COLOR : d.color }} />
+                    </div>
                   </div>
-                  <div className="h-1.5 rounded-full bg-gray-100 overflow-hidden mt-1">
-                    <div className="h-full rounded-full transition-all"
-                      style={{ width: `${d.pct}%`, background: d.color }} />
-                  </div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
-          </div>
+          )}
+        </Card>
+
+        {/* Impact sur votre revenu — pourcentage = dépenses / revenu mensuel × 100 */}
+        <Card className="rounded-3xl border-0 p-5 shadow-sm" style={{ background: "linear-gradient(135deg,#FFFFFF,#F4FBF8)" }}>
+          <h3 className={`text-sm font-bold mb-3 ${isAr ? "text-right" : ""}`} style={{ color: "#0F766E", fontFamily: arFont }}>
+            {t("incomeImpactTitle")}
+          </h3>
+          {effectiveIncome <= 0 ? (
+            <p className="text-xs text-muted-foreground text-center py-2" style={{ fontFamily: arFont }}>
+              {t("incomeImpactEmptyState")}
+            </p>
+          ) : (
+            <div className={`flex items-center gap-4 ${isAr ? "flex-row-reverse" : ""}`}>
+              <svg width="140" height="140" viewBox="0 0 140 140" className="shrink-0">
+                <circle cx="70" cy="70" r={r} fill="none" stroke="#F1F5F9" strokeWidth="18" />
+                {incomeImpactData.map(d => {
+                  if (d.spent <= 0) return null;
+                  const len = (c * d.pct) / 100;
+                  const off = c - accIncomeShare;
+                  accIncomeShare += len;
+                  return (
+                    <circle key={d.id} cx="70" cy="70" r={r} fill="none"
+                      stroke={d.color} strokeWidth="18"
+                      strokeDasharray={`${len} ${c - len}`}
+                      strokeDashoffset={off}
+                      transform="rotate(-90 70 70)" />
+                  );
+                })}
+                <text x="70" y="68" textAnchor="middle" fontSize="11" fill="#64748B" fontFamily={arFont}>{t("ofIncomeLabel")}</text>
+                <text x="70" y="84" textAnchor="middle" fontSize="13" fontWeight="700" fill="#0F766E">
+                  {Math.round(totalIncomeImpactPct)}%
+                </text>
+              </svg>
+              <div className="flex-1 space-y-2">
+                {incomeImpactData.map(d => (
+                  <div key={d.id} className={`${isAr ? "text-right" : ""}`}>
+                    <div className={`flex items-center justify-between text-[11px] ${isAr ? "flex-row-reverse" : ""}`}>
+                      <span className={`flex items-center gap-1.5 font-medium ${isAr ? "flex-row-reverse" : ""}`} style={{ fontFamily: arFont, color: "#0F766E" }}>
+                        <span className="h-2.5 w-2.5 rounded-full" style={{ background: d.color }} />
+                        {d.name}
+                      </span>
+                      <span className="font-bold tabular-nums" style={{ color: "#0F766E" }}>{Math.round(d.pct)}%</span>
+                    </div>
+                    <div className={`flex justify-between text-[10px] text-muted-foreground mt-0.5 ${isAr ? "flex-row-reverse" : ""}`}>
+                      <span className="tabular-nums">{formatMAD(d.spent, lang, currency)}</span>
+                    </div>
+                    <div className="h-1.5 rounded-full bg-gray-100 overflow-hidden mt-1">
+                      <div className="h-full rounded-full transition-all"
+                        style={{ width: `${Math.min(100, d.pct)}%`, background: d.color }} />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
         </Card>
 
         {/* Monthly comparison */}

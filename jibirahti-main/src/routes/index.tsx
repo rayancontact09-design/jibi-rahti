@@ -35,8 +35,6 @@ const T: Record<Lang, Record<string, string>> = {
     heroNote: "✨ Essai gratuit de 2 heures pour découvrir l'application",
     heroBadge: "Disponible gratuitement maintenant",
     trialBadge: "✨ Essai gratuit de 2 heures pour découvrir l'application",
-    priceMonthlyLabel: "Abonnement mensuel",
-    priceMonthlyValue: "💰 40 DH / mois",
     priceYearlyLabel: "Abonnement annuel",
     priceYearlyValue: "💰 250 DH / an",
     whatsappActivationFast: "Activation rapide via WhatsApp",
@@ -71,7 +69,7 @@ const T: Record<Lang, Record<string, string>> = {
     p2t: "Activation par code",
     p2d: "Recevez votre code d'activation unique via WhatsApp après paiement.",
     p3t: "Renouvellement facile",
-    p3d: "Renouvelez votre abonnement (40 DH/mois ou 250 DH/an) directement via WhatsApp.",
+    p3d: "Renouvelez votre abonnement (250 DH/an) directement via WhatsApp.",
     ctaWhatsapp: "Contacter sur WhatsApp",
     planCta: "Commencer l'essai gratuit",
     planCtaSub: "2 heures gratuites, puis contactez-nous via WhatsApp",
@@ -80,7 +78,7 @@ const T: Record<Lang, Record<string, string>> = {
     q1q: "Comment installer l'application sur mon téléphone ?",
     q1a: "Ouvrez le site dans Chrome (Android) ou Safari (iPhone). Vous verrez apparaître une bannière « Ajouter à l'écran d'accueil » ou cliquez sur le bouton « Installer l'application ». L'application s'installera comme une application native.",
     q2q: "Comment obtenir un code d'activation ?",
-    q2a: "Après votre essai gratuit de 2 heures, contactez-nous sur WhatsApp au +212 644411059 pour activer votre abonnement (40 DH/mois ou 250 DH/an). Nous vous enverrons votre code d'activation après confirmation du paiement.",
+    q2a: "Après votre essai gratuit de 2 heures, contactez-nous sur WhatsApp au +212 644411059 pour activer votre abonnement (250 DH/an). Nous vous enverrons votre code d'activation après confirmation du paiement.",
     q3q: "Comment exporter mon rapport en PDF ?",
     q3a: "Dans la section Rapport, appuyez sur le bouton « Exporter PDF ». Le rapport est généré avec toutes vos données du mois et téléchargé directement sur votre appareil.",
     q4q: "Mes données financières sont-elles sécurisées ?",
@@ -113,8 +111,6 @@ const T: Record<Lang, Record<string, string>> = {
     heroNote: "✨ تجربة مجانية لمدة ساعتين لاكتشاف التطبيق",
     heroBadge: "متاح الآن مجاناً",
     trialBadge: "✨ تجربة مجانية لمدة ساعتين لاكتشاف التطبيق",
-    priceMonthlyLabel: "اشتراك شهري",
-    priceMonthlyValue: "💰 40 درهم / شهرياً",
     priceYearlyLabel: "اشتراك سنوي",
     priceYearlyValue: "💰 250 درهم / سنوياً",
     whatsappActivationFast: "تفعيل سريع عبر واتساب",
@@ -149,7 +145,7 @@ const T: Record<Lang, Record<string, string>> = {
     p2t: "التفعيل برمز",
     p2d: "استلم رمز التفعيل الخاص بك عبر واتساب بعد الدفع.",
     p3t: "تجديد سهل",
-    p3d: "جدّد اشتراكك (40 درهم/شهرياً أو 250 درهم/سنوياً) مباشرة عبر واتساب.",
+    p3d: "جدّد اشتراكك (250 درهم/سنوياً) مباشرة عبر واتساب.",
     ctaWhatsapp: "تواصل عبر واتساب",
     planCta: "ابدأ التجربة المجانية",
     planCtaSub: "ساعتان مجانتان، ثم تواصل معنا عبر واتساب",
@@ -158,7 +154,7 @@ const T: Record<Lang, Record<string, string>> = {
     q1q: "كيف أثبّت التطبيق على هاتفي؟",
     q1a: "افتح الموقع في Chrome (أندرويد) أو Safari (آيفون). ستظهر بانر «إضافة إلى الشاشة الرئيسية» أو انقر على زر «تثبيت التطبيق». سيُثبَّت التطبيق كتطبيق أصيل.",
     q2q: "كيف أحصل على رمز التفعيل؟",
-    q2a: "بعد انتهاء تجربتك المجانية لمدة ساعتين، تواصل معنا على واتساب 212644411059+ لتفعيل اشتراكك (40 درهم/شهرياً أو 250 درهم/سنوياً). سنرسل لك رمز التفعيل بعد تأكيد الدفع.",
+    q2a: "بعد انتهاء تجربتك المجانية لمدة ساعتين، تواصل معنا على واتساب 212644411059+ لتفعيل اشتراكك (250 درهم/سنوياً). سنرسل لك رمز التفعيل بعد تأكيد الدفع.",
     q3q: "كيف أصدّر تقريري بصيغة PDF؟",
     q3a: "في قسم التقرير، انقر على زر «تصدير PDF». يتم إنشاء التقرير بجميع بيانات الشهر وتنزيله مباشرة على جهازك.",
     q4q: "هل بياناتي المالية آمنة؟",
@@ -192,8 +188,6 @@ const T: Record<Lang, Record<string, string>> = {
     heroNote: "✨ Free 2-hour trial to discover the app",
     heroBadge: "Available for free now",
     trialBadge: "✨ Free 2-hour trial to discover the app",
-    priceMonthlyLabel: "Monthly subscription",
-    priceMonthlyValue: "💰 40 DH / month",
     priceYearlyLabel: "Annual subscription",
     priceYearlyValue: "💰 250 DH / year",
     whatsappActivationFast: "Quick activation via WhatsApp",
@@ -228,7 +222,7 @@ const T: Record<Lang, Record<string, string>> = {
     p2t: "Activation by code",
     p2d: "Receive your unique activation code via WhatsApp after payment.",
     p3t: "Easy renewal",
-    p3d: "Renew your subscription (40 DH/month or 250 DH/year) directly via WhatsApp.",
+    p3d: "Renew your subscription (250 DH/year) directly via WhatsApp.",
     ctaWhatsapp: "Contact on WhatsApp",
     planCta: "Start the free trial",
     planCtaSub: "2 hours free, then contact us via WhatsApp",
@@ -237,7 +231,7 @@ const T: Record<Lang, Record<string, string>> = {
     q1q: "How do I install the app on my phone?",
     q1a: "Open the site in Chrome (Android) or Safari (iPhone). A banner \"Add to Home Screen\" will appear, or click the \"Install app\" button. The app will install like a native app.",
     q2q: "How do I get an activation code?",
-    q2a: "After your free 2-hour trial, contact us on WhatsApp at +212 644411059 to activate your subscription (40 DH/month or 250 DH/year). We'll send you your activation code once payment is confirmed.",
+    q2a: "After your free 2-hour trial, contact us on WhatsApp at +212 644411059 to activate your subscription (250 DH/year). We'll send you your activation code once payment is confirmed.",
     q3q: "How do I export my report as a PDF?",
     q3a: "In the Report section, tap the \"Export PDF\" button. The report is generated with all your data for the month and downloaded directly to your device.",
     q4q: "Is my financial data secure?",
@@ -416,7 +410,7 @@ function LandingPage() {
           </button>
         </div>
 
-        <p className="text-sm font-bold mb-1" style={{ color: "#0F766E" }}>{C.priceMonthlyValue}</p>
+        <p className="text-sm font-bold mb-1" style={{ color: "#0F766E" }}>{C.priceYearlyValue}</p>
         <p className="text-xs text-muted-foreground">{C.heroNote}</p>
 
         <div className="flex items-center justify-center gap-5 mt-8 flex-wrap">
@@ -511,19 +505,13 @@ function LandingPage() {
             <p className="text-muted-foreground text-sm sm:text-base">{C.planSub}</p>
           </div>
 
-          {/* Price cards — monthly / yearly */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
-            {[
-              { label: C.priceMonthlyLabel, value: C.priceMonthlyValue },
-              { label: C.priceYearlyLabel, value: C.priceYearlyValue },
-            ].map(({ label, value }) => (
-              <div key={label}
-                className="flex flex-col items-center text-center rounded-2xl p-6 border border-border/40 shadow-sm"
-                style={{ background: "rgba(255,255,255,0.75)", backdropFilter: "blur(10px)" }}>
-                <p className="text-xs font-semibold text-muted-foreground mb-1">{label}</p>
-                <p className="text-2xl font-extrabold" style={{ color: "#0F766E" }}>{value}</p>
-              </div>
-            ))}
+          {/* Single annual price card */}
+          <div className="flex justify-center mb-6">
+            <div className="flex flex-col items-center text-center rounded-2xl p-6 border border-border/40 shadow-sm max-w-xs w-full"
+              style={{ background: "rgba(255,255,255,0.75)", backdropFilter: "blur(10px)" }}>
+              <p className="text-xs font-semibold text-muted-foreground mb-1">{C.priceYearlyLabel}</p>
+              <p className="text-2xl font-extrabold" style={{ color: "#0F766E" }}>{C.priceYearlyValue}</p>
+            </div>
           </div>
           <p className="text-center text-xs font-semibold mb-8" style={{ color: "#0F766E" }}>
             {C.trialBadge}
@@ -564,7 +552,7 @@ function LandingPage() {
               </a>
             </div>
             <div className="flex flex-col items-center gap-1 mt-5">
-              <p className="text-white text-sm font-bold">{C.priceMonthlyValue}</p>
+              <p className="text-white text-sm font-bold">{C.priceYearlyValue}</p>
               <p className="text-white/70 text-xs">{C.whatsappActivationFast}</p>
               <p className="text-white/70 text-xs">{C.trialBadge}</p>
             </div>
